@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.wjx.xing.activitys.LeaveActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_btn_bg_color">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="请假"
+            android:textSize="25dp"
+            />
+
+        <TextView
+            android:id="@+id/leave_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="3dp"
+            android:text="返回"
+            />
+
+        <TextView
+            android:id="@+id/leave_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="3dp"
+            android:text="确定"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Textview"
+                android:text="请假时间："
+                />
+
+            <EditText
+                android:id="@+id/et_leave_startLeave"
+                style="@style/Editview"
+                android:hint="含当天"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Textview"
+                android:text="截止时间："
+                />
+
+            <EditText
+                android:id="@+id/et_leave_endLeave"
+                style="@style/Editview"
+                android:hint="含当天"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/Textview"
+                android:text="请假理由："
+                />
+
+            <EditText
+                android:id="@+id/et_leave_info"
+                style="@style/Editview"
+                >
+            </EditText>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_leave_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上传照片"
+            />
+
+        <ImageView
+            android:id="@+id/iv_picture"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingRight="20dp">
+
+            <Button
+                android:id="@+id/btn_leave_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:text="申请"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

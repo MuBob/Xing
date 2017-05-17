@@ -1,0 +1,61 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.example.wjx.xing.fragments.Fragment_everyday">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendar_everyday"
+                android:layout_above="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:mcv_showOtherDates="all"
+                app:mcv_selectionColor="#00f"
+                app:mcv_allowClickDaysOutsideCurrentMonth="true"
+                >
+            </com.prolificinteractive.materialcalendarview.MaterialCalendarView >
+            <TextView
+                android:layout_above="@+id/linear_everyday_bottom"
+                android:textAlignment="center"
+                android:layout_marginTop="10dp"
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="15dp"
+                android:text="签到：3  请假：1   出差：0"
+                />
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/linear_everyday_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_everyday_sign"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="签到"/>
+
+            <Button
+                android:id="@+id/btn_everyday_leave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="请假"/>
+
+            <Button
+                android:id="@+id/btn_everyday_evection"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="出差"/>
+
+
+        </LinearLayout>
+        </RelativeLayout>
+</FrameLayout>

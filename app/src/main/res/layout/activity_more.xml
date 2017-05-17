@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.wjx.xing.activitys.MoreActivity">
+    <RelativeLayout style="@style/title_layout">
+        <TextView
+            style="@style/title_center"
+            android:text="更多"
+            />
+        <TextView
+            android:id="@+id/leave_left"
+            style="@style/title_left"
+            android:text="返回"
+            />
+        <TextView
+            android:id="@+id/leave_right"
+            style="@style/title_right"
+            android:text="确定"
+            />
+    </RelativeLayout>
+    <TextView
+        android:paddingTop="20dp"
+        android:text="敬请期待"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
