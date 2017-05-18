@@ -12,12 +12,14 @@
     <TextView
         android:id="@+id/message_left"
         style="@style/title_left"
+        android:clickable="true"
         android:onClick="onClick"
         />
 
     <TextView
         android:id="@+id/message_right"
         style="@style/title_right"
+        android:clickable="true"
         android:onClick="onClick"
         />
 </RelativeLayout>

@@ -9,7 +9,7 @@ import com.example.wjx.xing.activitys.EveryDayActivity;
 import com.example.wjx.xing.activitys.InfoEducationActivity;
 import com.example.wjx.xing.activitys.InfoSelfActivity;
 import com.example.wjx.xing.activitys.InfoSkillActivity;
-import com.example.wjx.xing.activitys.MoreActivity;
+import com.example.wjx.xing.activitys.LoginActivity;
 import com.example.wjx.xing.activitys.PasswordManagerActivity;
 import com.example.wjx.xing.utils.StartActivity;
 
@@ -25,7 +25,7 @@ public class NormalFragment extends BaseFragment implements View.OnClickListener
     private TextView mSetting;//职称技能
     private TextView mSearch;//密码管理
     private TextView mEveryDay;//日常考勤
-    private TextView mMore;//更多
+    private TextView mMore;//退出登陆
 
 
     @Override
@@ -82,8 +82,9 @@ public class NormalFragment extends BaseFragment implements View.OnClickListener
                 StartActivity.jumpTo(getActivity(), intent_every_day);
                 break;
             case R.id.tv_mine_more://更多界面
-                Intent intent_more = new Intent(getActivity(), MoreActivity.class);
-                StartActivity.jumpTo(getActivity(), intent_more);
+//                Intent intent_more = new Intent(getActivity(), MoreActivity.class);
+//                StartActivity.jumpTo(getActivity(), intent_more);
+                StartActivity.StartActivity(getActivity(), LoginActivity.class);
                 break;
         }
     }

@@ -65,22 +65,42 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
+            <CheckBox
+                android:id="@+id/radio_is_manager"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold"/>
-            <Button
-                android:id="@+id/email_register_in_button"
-                style="?android:textAppearanceSmall"
+                android:text="人事专员"
+                android:layout_marginTop="20dp"
+                android:textSize="20sp"
+                android:textColor="@color/text_color"
+                />
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_register_in"
-                android:textStyle="bold"/>
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/email_sign_in_button"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    style="@style/button_style"
+                    android:text="@string/action_sign_in"
+                   />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    />
+                <Button
+                    android:id="@+id/email_register_in_button"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    style="@style/button_style"
+                    android:text="@string/action_register_in"
+                    />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

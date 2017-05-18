@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ public class LoginActivity extends BaseActivity {
     private EditText mPassword;
     private TextInputLayout mInput_number;
     private TextInputLayout mInput_password;
+    private CheckBox isManagerBox;
 
     @Override
     protected CharSequence getTitleText() {
@@ -149,6 +151,7 @@ public class LoginActivity extends BaseActivity {
         mInput_password = (TextInputLayout) findViewById(R.id.textinput_password_main);
         mNumber = (EditText)findViewById(R.id.number_login);
         mPassword = (EditText) findViewById(R.id.password_login);
+        isManagerBox = (CheckBox) findViewById(R.id.radio_is_manager);
     }
 
     /**
@@ -187,7 +190,7 @@ public class LoginActivity extends BaseActivity {
                         //有账号就登录 没有账号就注册
                         Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
                         if("登陆成功".equals(result)){
-                            int curentRole=1;
+                            int curentRole=isManagerBox.isSelected()?2:1;
                             getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
                                     .putInt(Common.KEY_ROLE_LOGIN, curentRole).commit();
                             Intent intent=new Intent(LoginActivity.this, MainActivity.class);

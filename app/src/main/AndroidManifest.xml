@@ -63,6 +63,14 @@
         </activity>
         <activity android:name=".activitys.SignInOutActivity">
         </activity>
+        <activity android:name=".activitys.manager.DepartmentManagerActivity">
+        </activity>
+        <activity android:name=".activitys.manager.AddDepartmentActivity">
+        </activity>
+        <activity android:name=".activitys.manager.PersonalManagerActivity">
+        </activity>
+        <activity android:name=".activitys.manager.AddPersonalActivity">
+        </activity>
     </application>
 
 </manifest>

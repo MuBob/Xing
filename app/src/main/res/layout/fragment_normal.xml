@@ -79,7 +79,7 @@
                 android:id="@+id/tv_mine_more"
                 style="@style/textview_items"
                 android:drawableLeft="@drawable/more"
-                android:text="更多"
+                android:text="退出登陆"
                 />
 
             <View style="@style/View_line"/>

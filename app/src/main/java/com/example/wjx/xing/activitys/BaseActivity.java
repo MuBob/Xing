@@ -32,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "BaseActivity.onCreate: start");
         try {
             setContentView(getResourceId());
             mRequestQueue = Volley.newRequestQueue(this);
@@ -100,9 +101,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.message_left:
+                Log.i(TAG, "BaseActivity.onClick: left");
                 onClickLeft();
+                break;
             case R.id.message_right:
                 onClickRight();
+                break;
+            default:
+                break;
         }
     }
 
@@ -117,7 +123,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected void onClickLeft() {
         Log.i(TAG, "BaseActivity.onClickLeft: ");
-        onBackPressed();
+        finish();
     }
 
     private static final String TAG = "BaseActivity";
