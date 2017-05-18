@@ -6,45 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.wjx.xing.activitys.LeaveActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/blue_btn_bg_color">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="请假"
-            android:textSize="25dp"
-            />
-
-        <TextView
-            android:id="@+id/leave_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:paddingLeft="3dp"
-            android:text="返回"
-            />
-
-        <TextView
-            android:id="@+id/leave_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="3dp"
-            android:text="确定"
-            />
-    </RelativeLayout>
+<include layout="@layout/layout_title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="30dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:orientation="vertical">
 
         <LinearLayout
@@ -104,8 +73,8 @@
 
         <Button
             android:id="@+id/btn_leave_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            style="@style/button_style"
             android:text="上传照片"
             />
 
@@ -113,21 +82,20 @@
             android:id="@+id/iv_picture"
             android:layout_width="200dp"
             android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
             />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
             <Button
                 android:id="@+id/btn_leave_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
                 android:text="申请"
+                style="@style/button_bottom_stytle"
+                android:onClick="onClick"
                 />
         </RelativeLayout>
     </LinearLayout>

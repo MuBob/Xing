@@ -6,21 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.wjx.xing.activitys.InfoselfActivity">
-    <RelativeLayout style="@style/title_layout">
-        <TextView
-            style="@style/title_center"
-            android:text="个人信息"
-            />
-        <TextView
-           style="@style/title_left"
-           android:id="@+id/message_left"
-            />
-        <TextView
-            android:id="@+id/message_right"
-            style="@style/title_right"
-            />
-    </RelativeLayout>
+    tools:context="com.example.wjx.xing.activitys.InfoSelfActivity">
+    <include layout="@layout/layout_title"/>
     <ListView
         android:paddingTop="20dp"
         android:id="@+id/lv_message"

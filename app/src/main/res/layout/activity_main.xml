@@ -1,59 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.wjx.xing.activitys.MainActivity">
-    <android.support.v4.view.ViewPager
+
+    <com.example.wjx.xing.view.NoScrollViewPager
         android:id="@+id/vp_main"
-        android:layout_above="@+id/rg_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rg_main"/>
+
     <RadioGroup
-        android:layout_alignParentBottom="true"
         android:id="@+id/rg_main"
-        android:background="@color/blackproject"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/blackproject"
+        android:orientation="horizontal">
+
         <RadioButton
+            android:id="@+id/rbt_normal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rbn"
+            android:button="@null"
             android:checked="true"
             android:drawableTop="@drawable/product_list"
-            android:background="@drawable/shape_rbn"
-            android:button="@null"
             android:gravity="center"
-            android:text="日常"
+            android:text="员工工作台"
             android:textColor="@color/aliceblue"
-            android:textSize="12dp"
-            android:id="@+id/rbt_everyday"
+            android:textSize="12dp"/>
+
+        <RadioButton
+            android:id="@+id/rbt_manager"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-        <RadioButton
+            android:layout_weight="1"
             android:background="@drawable/shape_rbn"
-            android:textColor="@color/aliceblue"
-            android:drawableTop="@drawable/shop_cart"
             android:button="@null"
-            android:gravity="center"
-            android:textSize="12dp"
-            android:text="报表"
-            android:id="@+id/rbt_report"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-        <RadioButton
-            android:background="@drawable/shape_rbn"
-            android:textColor="@color/aliceblue"
             android:drawableTop="@drawable/email"
-            android:button="@null"
-            android:textSize="12dp"
             android:gravity="center"
-            android:text="我的"
-            android:id="@+id/rbt_mine"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:text="人事专员工作台"
+            android:textColor="@color/aliceblue"
+            android:textSize="12dp"/>
     </RadioGroup>
 </RelativeLayout>

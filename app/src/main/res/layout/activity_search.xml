@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.wjx.xing.activitys.SearchActivity">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/blue_btn_bg_color">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="请假"
-            android:textSize="25dp"
-            />
-        <TextView
-            android:id="@+id/leave_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:paddingLeft="3dp"
-            android:text="返回"
-            />
-        <TextView
-            android:id="@+id/leave_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="3dp"
-            android:text="确定"
-            />
-    </RelativeLayout>
+    tools:context="com.example.wjx.xing.activitys.PasswordManagerActivity">
+    <include layout="@layout/layout_title"/>
     <TextView
-        android:paddingTop="20dp"
-        android:text="敬请期待"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:text="旧密码："
+        style="@style/textview_style"/>
+    <EditText
+
+        android:id="@+id/edit_password_old"
+        style="@style/edittext_style"
+        android:hint="请输入原始密码"
+        />
+    <TextView
+        android:text="新密码："
+        style="@style/textview_style"/>
+    <EditText
+        android:id="@+id/edit_password_new1"
+        style="@style/edittext_style"
+        android:hint="请输入新密码"
+        />
+    <TextView
+        android:text="重复新密码："
+        style="@style/textview_style"/>
+    <EditText
+        android:id="@+id/edit_password_new2"
+        style="@style/edittext_style"
+        android:hint="请输入重复新密码"
+        />
+    <Button
+        android:id="@+id/button_ok"
+        android:onClick="onClick"
+        style="@style/button_bottom_stytle"
+        android:text="确定"
+        />
 </LinearLayout>

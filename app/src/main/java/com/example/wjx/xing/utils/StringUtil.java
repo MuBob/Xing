@@ -6,6 +6,12 @@ package com.example.wjx.xing.utils;
 
 public class StringUtil {
 
+    public static boolean isNull(String str){
+        if(str==null||"".equals(str)){
+            return true;
+        }
+        return false;
+    }
     /**
      * 验证password是否正确
      * 模拟密码大于6位

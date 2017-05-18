@@ -1,5 +1,6 @@
 package com.example.wjx.xing.activitys;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,13 +27,16 @@ public class SplashActivity extends AppCompatActivity {
             super.handleMessage(msg);
             if (msg.what == SUCCESS) {
                 //收到消息之后跳转页面
-                mPreferences = getSharedPreferences("Seting_ordering", 0);
-                Boolean isLogin = mPreferences.getBoolean(Common.KEY_BOOLEAN_LOGIN_AUTO, false);
-                isLogin = true;
-                if (isLogin) {
+                mPreferences = getSharedPreferences(Common.SP_NAME_SETTING, 0);
+                int role = mPreferences.getInt(Common.KEY_ROLE_LOGIN, 0);
+                //测试使用
+                role = 2;
+                if (role>0) {
                     //已经登录过了 
                     Toast.makeText(SplashActivity.this, "欢迎回来", Toast.LENGTH_SHORT).show();
-                    StartActivity.StartActivity(SplashActivity.this, MainActivity.class);
+                    Intent intent=new Intent(SplashActivity.this, MainActivity.class);
+                    intent.putExtra(Common.KEY_ROLE_LOGIN, role);
+                    StartActivity.StartActivity(SplashActivity.this, intent);
                 } else {
                     StartActivity.StartActivity(SplashActivity.this, LoginActivity.class);
                 }

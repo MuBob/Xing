@@ -2,29 +2,23 @@ package com.example.wjx.xing.activitys;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.wjx.xing.R;
 import com.example.wjx.xing.Common;
+import com.example.wjx.xing.R;
+import com.example.wjx.xing.dialog.EditDialog;
 import com.example.wjx.xing.entitys.Items_message;
 
 import org.json.JSONObject;
@@ -34,80 +28,84 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InfoselfActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class InfoSelfActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
-    private View mLeft;
-    private View mRight;
     private ListView mListView;
     private List<Items_message> mList;
-    private EditText mText;
+    private EditDialog editDialog;
     private myAdapter mAdapter;
-    private JsonObjectRequest request;
-    private RequestQueue mRequestQueue ;
+    private int clickPosition;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_infoself);
-        mRequestQueue = Volley.newRequestQueue(this);
-        initView();
+    protected int getResourceId() {
+        return R.layout.activity_infoself;
     }
-
-    private void initView() {
-        mLeft = findViewById(R.id.message_left);
-        mRight = findViewById(R.id.message_right);
-        mLeft.setOnClickListener(this);
-        mRight.setOnClickListener(this);
+    @Override
+    protected void initView() {
         mListView = (ListView) findViewById(R.id.lv_message);
-        initData();
-        mAdapter = new myAdapter(this, mList);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(this);
     }
-
-    private void initData() {
+    @Override
+    protected void initData() {
         //准备数据
         if(mList == null){
             mList = new ArrayList<>();
         }
         mList.clear();
-        mList.add(new Items_message("姓名","王婧鑫"));
-        mList.add(new Items_message("年龄","21"));
-        mList.add(new Items_message("学历","本科"));
-        mList.add(new Items_message("住址","8号公寓"));
+        mList.add(new Items_message("姓名",""));
+        mList.add(new Items_message("性别",""));
+        mList.add(new Items_message("身份证号",""));
+        mList.add(new Items_message("出生日期",""));
+        mAdapter = new myAdapter(this, mList);
+        editDialog=new EditDialog(this, new EditDialog.OnEditOkClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, String afterText) {
+                mList.get(clickPosition).setValue(afterText);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.message_left:
-                finish();
-                break;
-            case R.id.message_right:
-                //保存
-                String url = Common.baseurl+"infoself?id=1";
-                request = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("ceshi", "onResponse: 访问成功");
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("ceshi", "onErrorResponse: 访问失败");
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        //在这里设置需要post的参数
-                        Map<String,String> map = new HashMap<String,String>();
-                        map.put("姓名","张三");
-                        return map;
-                    }
-                };
-                mRequestQueue.add(request);
-                break;
-        }
+    protected CharSequence getTitleText() {
+        return "基本信息";
+    }
+
+    @Override
+    protected void initSet() {
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);
+    }
+
+
+    @Override
+    protected void onClickRight() {
+        //保存
+        String url = Common.baseurl+"infoself?id=1";
+        mRequest = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ceshi", "onResponse: 访问成功");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ceshi", "onErrorResponse: 访问失败");
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // TODO: 2017/5/18  在这里设置需要post的参数
+                Map<String,String> map = new HashMap<String,String>();
+                map.put("姓名","张三");
+                return map;
+            }
+        };
+        mRequestQueue.add(mRequest);
+    }
+
+    @Override
+    protected void onClickLeft() {
+        onBackPressed();
     }
 
     /**
@@ -118,26 +116,12 @@ public class InfoselfActivity extends AppCompatActivity implements View.OnClickL
      * @param id
      */
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        //点击修改
-        mText = new EditText(this);
-        new AlertDialog.Builder(this).setTitle("请输入：").setView(mText).setPositiveButton("修改", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String value_updata = mText.getText().toString().trim();
-                mList.get(position).setValue(value_updata);
-                mAdapter.notifyDataSetChanged();
-                Toast.makeText(InfoselfActivity.this, "已修改", Toast.LENGTH_SHORT).show();
-            }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(InfoselfActivity.this, "已取消", Toast.LENGTH_SHORT).show();
-            }
-        }).show();
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        clickPosition=position;
+        editDialog.show(mList.get(clickPosition).getValue());
     }
 
-    class myAdapter extends BaseAdapter{
+    private class myAdapter extends BaseAdapter{
 
         private Context mContext;
         private List<Items_message> mList;

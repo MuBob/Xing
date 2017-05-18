@@ -1,8 +1,7 @@
 package com.example.wjx.xing.activitys;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -18,13 +17,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.wjx.xing.R;
 import com.example.wjx.xing.Common;
+import com.example.wjx.xing.R;
 import com.example.wjx.xing.utils.StartActivity;
 import com.example.wjx.xing.utils.StringUtil;
 
@@ -34,7 +31,7 @@ import org.json.JSONObject;
 /**
  * 输入账号密码时  进度条隐藏
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private AutoCompleteTextView mNumberView;
     private EditText mPasswordView;
@@ -44,25 +41,18 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPassword;
     private TextInputLayout mInput_number;
     private TextInputLayout mInput_password;
-    private RequestQueue mRequestQueue;
-    private String mResult;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        //这里的this指的是Context
-        mRequestQueue = Volley.newRequestQueue(this);
-        InitView();
+    protected CharSequence getTitleText() {
+        return null;
     }
+    @Override
+    protected void onClickRight() {
 
-    /**
-     * 初始化界面
-     */
-    private void InitView() {
-        mNumberView = (AutoCompleteTextView) findViewById(R.id.number_login);
-        mPasswordView = (EditText) findViewById(R.id.password_login);
-        //修改软键盘的Enter
+    }
+    @Override
+    protected void initSet() {
+//修改软键盘的Enter
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -73,28 +63,6 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-        Button mEmailRegisterInButton = (Button) findViewById(R.id.email_register_in_button);
-        mEmailRegisterInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptRegister();
-            }
-        });
-        //整个登录界面
-        mLoginFormView = findViewById(R.id.login_form);
-        //进度条
-        mProgressView = (ProgressBar) findViewById(R.id.login_progress);
-        mInput_number = (TextInputLayout) findViewById(R.id.textinput_number_main);
-        mInput_password = (TextInputLayout) findViewById(R.id.textinput_password_main);
-        mNumber = (EditText)findViewById(R.id.number_login);
-        mPassword = (EditText) findViewById(R.id.password_login);
         mNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -141,11 +109,53 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected int getResourceId() {
+        return R.layout.activity_login;
+    }
+
+    /**
+     * 初始化界面
+     */
+    @Override
+    protected void initView() {
+        mNumberView = (AutoCompleteTextView) findViewById(R.id.number_login);
+        mPasswordView = (EditText) findViewById(R.id.password_login);
+
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+        Button mEmailRegisterInButton = (Button) findViewById(R.id.email_register_in_button);
+        mEmailRegisterInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptRegister();
+            }
+        });
+        //整个登录界面
+        mLoginFormView = findViewById(R.id.login_form);
+        //进度条
+        mProgressView = (ProgressBar) findViewById(R.id.login_progress);
+        mInput_number = (TextInputLayout) findViewById(R.id.textinput_number_main);
+        mInput_password = (TextInputLayout) findViewById(R.id.textinput_password_main);
+        mNumber = (EditText)findViewById(R.id.number_login);
+        mPassword = (EditText) findViewById(R.id.password_login);
+    }
+
     /**
      * 跳转注册界面
      */
     private void attemptRegister() {
-        // TODO: 2017/5/17
+        Toast.makeText(this,"请联系服务商注册",Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -172,13 +182,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    mResult = response.getString("result");
-                    if(!"".equals(mResult)){
+                    String result = response.getString("result");
+                    if(!"".equals(result)){
                         //有账号就登录 没有账号就注册
-                        Toast.makeText(LoginActivity.this, mResult, Toast.LENGTH_SHORT).show();
-                        getSharedPreferences("Seting_ordering", 0).edit().putBoolean("isLogin",true).commit();
-                        if(!"登录失败".equals(mResult)){
-                            StartActivity.StartActivity(LoginActivity.this,MainActivity.class);
+                        Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
+                        if("登陆成功".equals(result)){
+                            int curentRole=1;
+                            getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
+                                    .putInt(Common.KEY_ROLE_LOGIN, curentRole).commit();
+                            Intent intent=new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra(Common.KEY_ROLE_LOGIN, curentRole);
+                            StartActivity.StartActivity(LoginActivity.this, intent);
                         }
                     }
                 } catch (JSONException e) {

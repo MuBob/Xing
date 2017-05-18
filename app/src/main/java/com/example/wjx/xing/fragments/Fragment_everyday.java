@@ -1,7 +1,9 @@
 package com.example.wjx.xing.fragments;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,18 +22,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.wjx.xing.R;
 import com.example.wjx.xing.Common;
+import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.EvectionActivity;
 import com.example.wjx.xing.activitys.LeaveActivity;
 import com.example.wjx.xing.activitys.MainActivity;
@@ -41,6 +37,13 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
 
@@ -117,6 +120,20 @@ public class Fragment_everyday extends Fragment implements OnDateSelectedListene
     public void getCurrrentLocation() {
         //获得当前位置的坐标
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            Toast.makeText(getContext(), "请到设置-权限管理中打开定位权限",Toast.LENGTH_LONG).show();
+            return;
+        }
         mLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (mLocation == null) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30 * 1000, 5, new LocationListener() {

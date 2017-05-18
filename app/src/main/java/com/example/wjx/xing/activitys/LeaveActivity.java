@@ -10,8 +10,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,8 +19,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.utils.SystemUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,63 +30,62 @@ import java.io.IOException;
 /**
  * 点击请假按钮之后  跳转到这
  */
-public class LeaveActivity extends AppCompatActivity implements View.OnClickListener {
+public class LeaveActivity extends BaseActivity{
 
     private Button mBtn_submit;
-    private View mEt_start;
-    private View mEt_end;
-    private View mEt_info;
-    private View left;
-    private View right;
     private Button mBtn_picture;
-    String imageFilePath;
+    private String imageFilePath;
     private ImageView mPicture;
     Dialog mCameraDialog;
+    public static final int REQUEST_CODE_CAMERA=102;
+    public static final int REQUEST_CODE_PICTURE=103;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leave);
-        initView();
+    protected void initTitle(TextView left, TextView title, TextView right) {
+        super.initTitle(left, title, right);
+        right.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected CharSequence getTitleText() {
+        return "请假";
+    }
+
+    @Override
+    protected void initSet() {
+        mBtn_picture.setOnClickListener(this);
+        mBtn_submit.setOnClickListener(this);
+    }
+
+    @Override
+    protected void initData() {
+        initDialoginfo();
     }
 
     /**
      * 初始化
      */
-    private void initView() {
-        left = findViewById(R.id.leave_left);
-        left.setOnClickListener(this);
-        right = findViewById(R.id.leave_right);
-        right.setOnClickListener(this);
-        mEt_start = findViewById(R.id.et_leave_startLeave);
-        mEt_end = findViewById(R.id.et_leave_endLeave);
-        mEt_info = findViewById(R.id.et_leave_info);
-
+    protected void initView() {
         mPicture = (ImageView)findViewById(R.id.iv_picture);
         //上传照片
         mBtn_picture = (Button) findViewById(R.id.btn_leave_picture);
-        mBtn_picture.setOnClickListener(this);
         mBtn_submit = (Button) findViewById(R.id.btn_leave_submit);
-        mBtn_submit.setOnClickListener(this);
+    }
+
+    @Override
+    protected int getResourceId() {
+        return R.layout.activity_leave;
     }
 
     @Override
     public void onClick(View v) {
+        super.onClick(v);
         switch(v.getId()){
-            case R.id.leave_left:
-                //关闭当前界面 回到之前的页面
-                finish();
-                break;
-            case R.id.leave_right:
-                //我还不知道干什么
-                break;
-
             case R.id.btn_leave_submit:
-                //提交
-
+                // TODO: 2017/5/18  网络请求，提交请假申请
                 break;
             case R.id.btn_leave_picture:
-                showDialoginfo();
+                mCameraDialog.show();
                 break;
             case R.id.btn_open_camera:
                 //跳转到照相机 拍照
@@ -94,18 +93,20 @@ public class LeaveActivity extends AppCompatActivity implements View.OnClickList
                 imageFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/filename.jpg";
                 Log.i("ceshi", "onClick: imageFilePATH"+imageFilePath);
                 File temp = new File(imageFilePath);
-                Uri imageFileUri = Uri.fromFile(temp);//获取文件的Uri	 
-                Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//跳转到相机Activity
-                it.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageFileUri);//告诉相机拍摄完毕输出图片到指定的Uri
-                startActivityForResult(it, 102);
+//                Uri imageFileUri = Uri.fromFile(temp);//获取文件的Uri
+//                Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//跳转到相机Activity
+//                it.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, imageFileUri);//告诉相机拍摄完毕输出图片到指定的Uri
+//                startActivityForResult(it, 102);
+                SystemUtil.toCamera(this, temp.getAbsolutePath(), REQUEST_CODE_CAMERA);
                 //取消dialog
                 mCameraDialog.cancel();
                 break;
             case R.id.btn_choose_img:
                 // 相册选取
-                Intent intent1 = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image*//*");
-                startActivityForResult(intent1, 103);
+//                Intent intent1 = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+////                intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image*//*");
+//                startActivityForResult(intent1, 103);
+                SystemUtil.toPicture(this, REQUEST_CODE_PICTURE);
                 mCameraDialog.cancel();
                 break;
             case R.id.btn_cancel:
@@ -115,7 +116,12 @@ public class LeaveActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void showDialoginfo() {
+    @Override
+    protected void onClickRight() {
+        //do nothing
+    }
+
+    private void initDialoginfo() {
         mCameraDialog = new Dialog(this,R.style.my_dialog);
         LinearLayout root = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.layout_camera_control,null);
         root.findViewById(R.id.btn_open_camera).setOnClickListener(this);
@@ -135,19 +141,19 @@ public class LeaveActivity extends AppCompatActivity implements View.OnClickList
         lp.height = root.getMeasuredHeight();
         lp.alpha = 9f;
         dialogWindow.setAttributes(lp);
-        mCameraDialog.show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode){
-		 case 102:
+		 case REQUEST_CODE_CAMERA:
 			 if (resultCode == Activity.RESULT_OK) {
-				 Bitmap bmp = BitmapFactory.decodeFile(imageFilePath);
+                 Log.i(TAG, "LeaveActivity.onActivityResult: imageFile="+imageFilePath);
+                 Bitmap bmp = BitmapFactory.decodeFile(imageFilePath);
                  mPicture.setImageBitmap(bmp);
 			 }
 		 break;
-		 case 103:
+		 case REQUEST_CODE_PICTURE:
 			 Bitmap bm = null;
 			 // 外界的程序访问ContentProvider所提供数据 可以通过ContentResolver接口
 			 ContentResolver resolver = getContentResolver();
@@ -164,14 +170,17 @@ public class LeaveActivity extends AppCompatActivity implements View.OnClickList
                 // 将光标移至开头 ，这个很重要，不小心很容易引起越界
                 cursor.moveToFirst();
                 // 最后根据索引值获取图片路径
-                String path = cursor.getString(column_index);
+                imageFilePath = cursor.getString(column_index);
                 mPicture.setImageURI(originalUri);
-			 } catch (IOException e) {
+                 Log.i(TAG, "LeaveActivity.onActivityResult: filePath="+imageFilePath);
+             } catch (IOException e) {
                 e.printStackTrace();
 			 }
 			 break;
 		 }
         super.onActivityResult(requestCode,resultCode,data);
-
     }
+
+    private static final String TAG = "LeaveActivity";
+
 }

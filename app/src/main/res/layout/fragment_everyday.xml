@@ -30,6 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="onClick"
                 android:text="签到"/>
 
             <Button
@@ -37,6 +38,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="onClick"
                 android:text="请假"/>
 
             <Button
@@ -44,6 +46,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="onClick"
                 android:text="出差"/>
 
 
