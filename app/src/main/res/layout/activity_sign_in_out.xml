@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.wjx.xing.activitys.SignInOutActivity">
+
+    <include layout="@layout/layout_title"/>
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:paddingTop="20dp"
+        android:gravity="center"
+        android:textColor="@color/text_color"
+        android:textSize="23sp"
+        android:text="当前位置"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_location"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+        android:padding="10dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_sign_in"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="签到"
+            android:textSize="20sp"
+            android:onClick="onClick"
+            android:textColor="@color/button_text_color"
+            android:background="@color/blue_btn_bg_color"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="签退"
+            android:id="@+id/btn_sign_out"
+            android:onClick="onClick"
+            android:textSize="20sp"
+            android:textColor="@color/button_text_color"
+            android:background="@color/blue_btn_bg_color"
+            />
+    </LinearLayout>
+</LinearLayout>

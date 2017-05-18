@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.wjx.xing.fragments.ManagerFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:id="@+id/tv_manager_department"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/message"
+                android:text="部门管理"
+                />
+
+            <View style="@style/View_line"/>
+
+            <TextView
+                android:id="@+id/tv_manager_personnel"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/info_self"
+                android:text="人员管理"
+                />
+
+            <View style="@style/View_line"/>
+
+            <TextView
+                android:id="@+id/tv_manager_department_turn"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/settings"
+                android:text="部门调转"
+                />
+
+            <View style="@style/View_line"/>
+
+            <TextView
+                android:id="@+id/tv_manager_attendance"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/search"
+                android:text="考勤管理"
+                />
+
+            <View style="@style/View_line"/>
+
+            <TextView
+                android:id="@+id/tv_apply_reply"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/product_list"
+                android:text="申请回复"
+                />
+
+            <View style="@style/View_line"/>
+
+            <TextView
+                android:id="@+id/tv_manager_password"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/more"
+                android:text="密码管理"
+                />
+
+            <View style="@style/View_line"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

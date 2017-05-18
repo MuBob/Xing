@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    style="@style/title_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/message_center"
+        style="@style/title_center"
+        android:text="标题"
+        />
+
+    <TextView
+        android:id="@+id/message_left"
+        style="@style/title_left"
+        android:onClick="onClick"
+        />
+
+    <TextView
+        android:id="@+id/message_right"
+        style="@style/title_right"
+        android:onClick="onClick"
+        />
+</RelativeLayout>

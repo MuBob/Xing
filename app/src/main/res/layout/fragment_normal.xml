@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.wjx.xing.fragments.ManagerFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/picture_1"
+                app:border_color="@color/darkcyan"
+                app:border_width="2dp"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:id="@+id/tv_mine_info"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/info_self"
+                android:text="基本信息"
+                />
+
+            <View style="@style/View_line"/>
+
+            <TextView
+                android:id="@+id/tv_mine_message"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/message"
+                android:text="学历信息"
+                />
+
+            <View style="@style/View_line"/>
+
+            <TextView
+                android:id="@+id/tv_mine_setting"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/settings"
+                android:text="职称技能"
+                />
+
+            <View style="@style/View_line"/>
+
+            <TextView
+                android:id="@+id/tv_mine_search"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/search"
+                android:text="密码管理"
+                />
+
+            <View style="@style/View_line"/>
+            <TextView
+                android:id="@+id/tv_every_day"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/product_list"
+                android:text="日常考勤"
+                />
+
+            <View style="@style/View_line"/>
+            <TextView
+                android:id="@+id/tv_mine_more"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/more"
+                android:text="更多"
+                />
+
+            <View style="@style/View_line"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
