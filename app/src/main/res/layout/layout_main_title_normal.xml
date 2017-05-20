@@ -5,7 +5,7 @@
 
     <TextView
         style="@style/title_center"
-        android:text="普通员工工作台"
+        android:text="员工工作台"
         />
 
 

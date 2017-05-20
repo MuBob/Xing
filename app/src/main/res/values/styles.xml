@@ -7,6 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
+    <style name="AppThemeFullScreen" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
     </style>
     <style name="AppThemeTitle" parent="AppTheme">

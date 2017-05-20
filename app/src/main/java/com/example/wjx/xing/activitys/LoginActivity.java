@@ -214,8 +214,10 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+    private static final String TAG = "LoginActivity";
     private void executeLogin() {
-        int curentRole=isManagerBox.isSelected()?2:1;
+        int curentRole=isManagerBox.isChecked()?2:1;
+        Log.i(TAG, "LoginActivity.executeLogin: currentRole="+curentRole);
         getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
                 .putInt(Common.KEY_ROLE_LOGIN, curentRole).commit();
         Intent intent=new Intent(LoginActivity.this, MainActivity.class);

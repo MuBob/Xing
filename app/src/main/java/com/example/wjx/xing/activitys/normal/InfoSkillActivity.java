@@ -1,8 +1,8 @@
 package com.example.wjx.xing.activitys.normal;
 
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfoSkillActivity extends BaseActivity {
-    private RelativeLayout accountingLayout, computerLayout, civilLayout, safetyLayout;
     private TextView accountingText, computerText, civilText, safetyText;
     private List<String> accountingList, computerList, civilList, safetyList;
     private SpinnerDialog accountingDialog, computerDialog, civilDialog, safetyDialog;
@@ -43,6 +42,7 @@ public class InfoSkillActivity extends BaseActivity {
         }
     }
 
+    private static final String TAG = "InfoSkillActivity";
     @Override
     public void onClick(View v) {
         super.onClick(v);
@@ -55,6 +55,7 @@ public class InfoSkillActivity extends BaseActivity {
                 }
                 break;
             case R.id.rl_computer:
+                Log.i(TAG, "InfoSkillActivity.onClick: computer");
                 if(StringUtil.isNull(computerText.getText().toString())){
                     computerDialog.show();
                 }else {
@@ -79,7 +80,6 @@ public class InfoSkillActivity extends BaseActivity {
     }
     @Override
     protected void initSet() {
-        accountingLayout.setOnClickListener(this);
     }
 
     @Override
@@ -103,10 +103,6 @@ public class InfoSkillActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        accountingLayout = (RelativeLayout) findViewById(R.id.rl_accounting);
-        computerLayout = (RelativeLayout) findViewById(R.id.rl_computer);
-        civilLayout = (RelativeLayout) findViewById(R.id.rl_civil_engineer);
-        safetyLayout = (RelativeLayout) findViewById(R.id.rl_safety_engineer);
         accountingText = (TextView) findViewById(R.id.tv_accounting);
         computerText = (TextView) findViewById(R.id.tv_computer);
         civilText = (TextView) findViewById(R.id.tv_civil_engineer);

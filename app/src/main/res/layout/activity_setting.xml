@@ -15,6 +15,8 @@
             android:id="@+id/rl_accounting"
             android:layout_width="match_parent"
             style="@style/textview_items"
+            android:clickable="true"
+            android:onClick="onClick"
             android:layout_height="wrap_content">
             <TextView
                 android:text="会计"
@@ -33,6 +35,8 @@
             android:id="@+id/rl_computer"
             android:layout_width="match_parent"
             style="@style/textview_items"
+            android:clickable="true"
+            android:onClick="onClick"
             android:layout_height="wrap_content">
             <TextView
                 android:text="计算机"
@@ -51,6 +55,8 @@
             android:id="@+id/rl_civil_engineer"
             android:layout_width="match_parent"
             style="@style/textview_items"
+            android:clickable="true"
+            android:onClick="onClick"
             android:layout_height="wrap_content">
             <TextView
                 android:text="注册土木工程师"
@@ -69,6 +75,8 @@
             android:id="@+id/rl_safety_engineer"
             android:layout_width="match_parent"
             style="@style/textview_items"
+            android:clickable="true"
+            android:onClick="onClick"
             android:layout_height="wrap_content">
             <TextView
                 android:text="注册安全工程师"

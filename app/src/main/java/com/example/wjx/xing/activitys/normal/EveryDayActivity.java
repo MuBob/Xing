@@ -6,10 +6,10 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.activitys.SignInOutActivity;
 import com.example.wjx.xing.utils.StartActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -25,6 +25,12 @@ public class EveryDayActivity extends BaseActivity implements OnDateSelectedList
     @Override
     protected CharSequence getTitleText() {
         return "日常考勤";
+    }
+
+    @Override
+    protected void initTitle(TextView left, TextView title, TextView right) {
+        super.initTitle(left, title, right);
+        right.setVisibility(View.GONE);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.wjx.xing.activitys;
+package com.example.wjx.xing.activitys.normal;
 
 import android.Manifest;
 import android.content.Context;
@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.utils.RequestPath;
 
 import org.json.JSONException;

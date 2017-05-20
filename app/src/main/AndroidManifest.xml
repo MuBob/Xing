@@ -23,6 +23,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activitys.SplashActivity"
+            android:theme="@style/AppThemeFullScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -66,7 +67,7 @@
         </activity>
         <activity android:name=".activitys.normal.EveryDayActivity">
         </activity>
-        <activity android:name=".activitys.SignInOutActivity">
+        <activity android:name=".activitys.normal.SignInOutActivity">
         </activity>
         <activity android:name=".activitys.manager.DepartmentManagerActivity">
         </activity>

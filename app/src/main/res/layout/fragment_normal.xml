@@ -26,64 +26,50 @@
                 app:border_color="@color/darkcyan"
                 app:border_width="2dp"/>
         </RelativeLayout>
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="20dp">
-            <TextView
-                android:id="@+id/tv_notify"
-                style="@style/textview_items"
-                android:drawableLeft="@drawable/product_list"
-                android:text="公文通告"
-                />
+            android:layout_height="match_parent">
 
-            <View style="@style/View_line"/>
-            <TextView
-                android:id="@+id/tv_mine_info"
-                style="@style/textview_items"
-                android:drawableLeft="@drawable/info_self"
-                android:text="基本信息"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+                <TextView
+                    android:id="@+id/tv_notify"
+                    style="@style/textview_items"
+                    android:drawableLeft="@drawable/product_list"
+                    android:text="公文通告"
+                    />
 
-            <View style="@style/View_line"/>
+                <View style="@style/View_line"/>
+                <TextView
+                    android:id="@+id/tv_mine_info"
+                    style="@style/textview_items"
+                    android:drawableLeft="@drawable/info_self"
+                    android:text="个人信息"
+                    />
 
-            <TextView
-                android:id="@+id/tv_mine_message"
-                style="@style/textview_items"
-                android:drawableLeft="@drawable/message"
-                android:text="学历信息"
-                />
+                <View style="@style/View_line"/>
 
-            <View style="@style/View_line"/>
+                <TextView
+                    android:id="@+id/tv_mine_search"
+                    style="@style/textview_items"
+                    android:drawableLeft="@drawable/search"
+                    android:text="密码管理"
+                    />
 
-            <TextView
-                android:id="@+id/tv_mine_setting"
-                style="@style/textview_items"
-                android:drawableLeft="@drawable/settings"
-                android:text="职称技能"
-                />
+                <View style="@style/View_line"/>
+                <TextView
+                    android:id="@+id/tv_every_day"
+                    style="@style/textview_items"
+                    android:drawableLeft="@drawable/product_list"
+                    android:text="日常考勤"
+                    />
 
-            <View style="@style/View_line"/>
+                <View style="@style/View_line"/>
 
-            <TextView
-                android:id="@+id/tv_mine_search"
-                style="@style/textview_items"
-                android:drawableLeft="@drawable/search"
-                android:text="密码管理"
-                />
-
-            <View style="@style/View_line"/>
-            <TextView
-                android:id="@+id/tv_every_day"
-                style="@style/textview_items"
-                android:drawableLeft="@drawable/product_list"
-                android:text="日常考勤"
-                />
-
-            <View style="@style/View_line"/>
-
-        </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </FrameLayout>

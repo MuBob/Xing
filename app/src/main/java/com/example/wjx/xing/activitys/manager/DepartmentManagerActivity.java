@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -74,6 +75,10 @@ public class DepartmentManagerActivity extends BaseActivity implements AdapterVi
         View contentView = getLayoutInflater().inflate(R.layout.popwindow_del, null);
         contentView.findViewById(R.id.tv_del).setOnClickListener(this);
         popupWindow.setContentView(contentView);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
     }
 
     @Override
@@ -123,8 +128,9 @@ public class DepartmentManagerActivity extends BaseActivity implements AdapterVi
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.i(TAG, "DepartmentManagerActivity.onItemLongClick: ");
         longClickPosition=position;
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
         return true;
     }
 }

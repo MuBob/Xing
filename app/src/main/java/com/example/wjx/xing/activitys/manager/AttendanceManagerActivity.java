@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -67,6 +68,10 @@ public class AttendanceManagerActivity extends BaseActivity implements AdapterVi
         View contentView = getLayoutInflater().inflate(R.layout.popwindow_del, null);
         contentView.findViewById(R.id.tv_del).setOnClickListener(this);
         popupWindow.setContentView(contentView);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
     }
 
     @Override
