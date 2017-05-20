@@ -36,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         try {
             setContentView(getResourceId());
             mRequestQueue = Volley.newRequestQueue(this);
+            initData();
             mLeft = (TextView) findViewById(R.id.message_left);
             mRight = (TextView) findViewById(R.id.message_right);
             mTitle = (TextView) findViewById(R.id.message_center);
@@ -60,7 +61,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             mWaitDialog.setCancelable(false);
             mWaitDialog.setCanceledOnTouchOutside(false);
             mWaitDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            initData();
             initView();
             initSet();
         } catch (Exception e) {
@@ -129,11 +129,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     private static final String TAG = "BaseActivity";
     protected abstract int getResourceId();
 
+    protected abstract void initData();
+
     protected abstract CharSequence getTitleText();
 
     protected abstract void onClickRight();
-
-    protected abstract void initData();
 
     protected abstract void initView();
 

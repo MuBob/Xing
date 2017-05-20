@@ -1,4 +1,4 @@
-package com.example.wjx.xing.activitys;
+package com.example.wjx.xing.activitys.normal;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.utils.SystemUtil;
 
 import java.io.File;
@@ -30,7 +31,7 @@ import java.io.IOException;
 /**
  * 点击请假按钮之后  跳转到这
  */
-public class LeaveActivity extends BaseActivity{
+public class LeaveActivity extends BaseActivity {
 
     private Button mBtn_submit;
     private Button mBtn_picture;

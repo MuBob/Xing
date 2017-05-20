@@ -16,6 +16,9 @@ public class PersonalBean {
     private String password;
     private Date birthday;
     private int sex;  //性别，1=男性，2=女性
+    private double leaveDays;     //请假天数
+    private double evectionDays;//出差天数
+    private double absenteeismDays;//旷工天数
 
     @Override
     public String toString() {
@@ -29,7 +32,34 @@ public class PersonalBean {
                 ", password='" + password + '\'' +
                 ", birthday=" + birthday +
                 ", sex=" + sex +
+                ", leaveDays=" + leaveDays +
+                ", evectionDays=" + evectionDays +
+                ", absenteeismDays=" + absenteeismDays +
                 '}';
+    }
+
+    public double getLeaveDays() {
+        return leaveDays;
+    }
+
+    public void setLeaveDays(double leaveDays) {
+        this.leaveDays = leaveDays;
+    }
+
+    public double getEvectionDays() {
+        return evectionDays;
+    }
+
+    public void setEvectionDays(double evectionDays) {
+        this.evectionDays = evectionDays;
+    }
+
+    public double getAbsenteeismDays() {
+        return absenteeismDays;
+    }
+
+    public void setAbsenteeismDays(double absenteeismDays) {
+        this.absenteeismDays = absenteeismDays;
     }
 
     public String getName() {

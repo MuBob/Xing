@@ -21,34 +21,39 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activitys.SplashActivity">
+        <activity
+            android:name=".activitys.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.MainActivity">
+        <activity android:name=".activitys.MainActivity"
+            >
         </activity>
-        <activity android:name=".activitys.LoginActivity"/>
         <activity
-            android:name=".activitys.LeaveActivity"
+            android:name=".activitys.LoginActivity"
+            android:theme="@style/AppThemeTitle"/>
+        <activity
+            android:name=".activitys.normal.LeaveActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
-            android:name=".activitys.EvectionActivity"
+            android:name=".activitys.normal.EvectionActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
-            android:name=".activitys.InfoEducationActivity"
+            android:name=".activitys.normal.InfoEducationActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
-            android:name=".activitys.InfoSkillActivity"
+            android:name=".activitys.normal.InfoSkillActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
-            android:name=".activitys.InfoSelfActivity"
+            android:name=".activitys.normal.InfoBaseActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
@@ -59,7 +64,7 @@
             android:name=".activitys.MoreActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
-        <activity android:name=".activitys.EveryDayActivity">
+        <activity android:name=".activitys.normal.EveryDayActivity">
         </activity>
         <activity android:name=".activitys.SignInOutActivity">
         </activity>
@@ -70,6 +75,22 @@
         <activity android:name=".activitys.manager.PersonalManagerActivity">
         </activity>
         <activity android:name=".activitys.manager.AddPersonalActivity">
+        </activity>
+        <activity android:name=".activitys.manager.DepartmentTurnActivity">
+        </activity>
+        <activity android:name=".activitys.manager.AddDepartmentTurnActivity">
+        </activity>
+        <activity android:name=".activitys.manager.AttendanceManagerActivity">
+        </activity>
+        <activity android:name=".activitys.manager.AddAttendanceActivity">
+        </activity>
+        <activity android:name=".activitys.manager.ApplyReplyActivity">
+        </activity>
+        <activity android:name=".activitys.manager.ReplyActivity">
+        </activity>
+        <activity android:name=".activitys.normal.NotifyActivity">
+        </activity>
+        <activity android:name=".activitys.normal.SelfInfoActivity">
         </activity>
     </application>
 

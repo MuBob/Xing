@@ -13,6 +13,9 @@ import com.example.wjx.xing.entitys.CircularAnim;
  */
 public class StartActivity {
     public static void jumpTo(Activity fromActivity, Intent newIntent){
+        if(newIntent==null){
+            return;
+        }
         fromActivity.startActivity(newIntent);
         fromActivity.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }

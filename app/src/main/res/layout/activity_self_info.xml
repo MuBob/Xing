@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_self_info"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.wjx.xing.activitys.normal.SelfInfoActivity">
+
+    <include layout="@layout/layout_title"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/tv_mine_info_base"
+            style="@style/textview_items"
+            android:drawableLeft="@drawable/info_self"
+            android:text="基本信息"
+            android:clickable="true"
+            android:onClick="onClick"
+            />
+
+        <View style="@style/View_line"/>
+
+        <TextView
+            android:id="@+id/tv_mine_info_record"
+            style="@style/textview_items"
+            android:drawableLeft="@drawable/message"
+            android:text="学历信息"
+            android:clickable="true"
+            android:onClick="onClick"
+            />
+
+        <View style="@style/View_line"/>
+
+        <TextView
+            android:id="@+id/tv_mine_info_skill"
+            style="@style/textview_items"
+            android:drawableLeft="@drawable/settings"
+            android:text="职称技能"
+            android:clickable="true"
+            android:onClick="onClick"
+            />
+
+        <View style="@style/View_line"/>
+
+    </LinearLayout>
+
+</LinearLayout>

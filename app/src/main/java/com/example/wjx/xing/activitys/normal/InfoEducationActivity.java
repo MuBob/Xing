@@ -1,4 +1,4 @@
-package com.example.wjx.xing.activitys;
+package com.example.wjx.xing.activitys.normal;
 
 import android.content.DialogInterface;
 import android.view.View;
@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.dialog.EditDialog;
 import com.example.wjx.xing.dialog.SpinnerDialog;
 import com.example.wjx.xing.utils.StringUtil;

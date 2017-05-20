@@ -1,10 +1,11 @@
-package com.example.wjx.xing.activitys;
+package com.example.wjx.xing.activitys.normal;
 
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.activitys.BaseActivity;
 
 /**
  * 出差管理

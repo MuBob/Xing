@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void initSet() {
         mviewPager.setAdapter(new MainFragAdapter(getSupportFragmentManager(), mFragments));
         mviewPager.setOnPageChangeListener(this);
-        mviewPager.setCurrentItem(0);
+        mviewPager.setCurrentItem(userRole>0?0:1);
 
         //给Radiogroupp添加监听事件
         mRadioGroup.setOnCheckedChangeListener(this);

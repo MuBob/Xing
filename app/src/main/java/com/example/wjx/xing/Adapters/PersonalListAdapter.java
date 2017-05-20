@@ -43,20 +43,24 @@ public class PersonalListAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView==null){
             LayoutInflater inflater= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item_department_list, null);
+            convertView = inflater.inflate(R.layout.item_personal_list, null);
             holder=new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {
             holder= (ViewHolder) convertView.getTag();
         }
-        holder.nameText.setText(list.get(position).getName());
+        PersonalBean personalBean = list.get(position);
+        holder.nameText.setText(personalBean.getName());
+        holder.departmentText.setText(personalBean.getDepartmentBean().getName());
         return convertView;
     }
 
     public class ViewHolder{
         private TextView nameText;
+        private TextView departmentText;
         public ViewHolder(View view){
-            nameText=(TextView) view.findViewById(R.id.item_department_name);
+            nameText=(TextView) view.findViewById(R.id.item_personal_name);
+            departmentText=(TextView) view.findViewById(R.id.item_personal_department);
         }
     }
 

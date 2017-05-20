@@ -1,16 +1,15 @@
 package com.example.wjx.xing.fragments;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
-import com.example.wjx.xing.activitys.EveryDayActivity;
-import com.example.wjx.xing.activitys.InfoEducationActivity;
-import com.example.wjx.xing.activitys.InfoSelfActivity;
-import com.example.wjx.xing.activitys.InfoSkillActivity;
-import com.example.wjx.xing.activitys.LoginActivity;
 import com.example.wjx.xing.activitys.PasswordManagerActivity;
+import com.example.wjx.xing.activitys.normal.EveryDayActivity;
+import com.example.wjx.xing.activitys.normal.NotifyActivity;
+import com.example.wjx.xing.activitys.normal.SelfInfoActivity;
 import com.example.wjx.xing.utils.StartActivity;
 
 /**
@@ -20,9 +19,8 @@ import com.example.wjx.xing.utils.StartActivity;
 
 public class NormalFragment extends BaseFragment implements View.OnClickListener {
 
+    private TextView mNotify;//通知公告
     private TextView mInfo;//个人信息
-    private TextView mMessage;//学历信息界面
-    private TextView mSetting;//职称技能
     private TextView mSearch;//密码管理
     private TextView mEveryDay;//日常考勤
     private TextView mMore;//退出登陆
@@ -33,12 +31,12 @@ public class NormalFragment extends BaseFragment implements View.OnClickListener
         return R.layout.fragment_normal;
     }
 
+
     @Override
     protected void initSet() {
         //添加监听
+        mNotify.setOnClickListener(this);
         mInfo.setOnClickListener(this);
-        mMessage.setOnClickListener(this);
-        mSetting.setOnClickListener(this);
         mSearch.setOnClickListener(this);
         mEveryDay.setOnClickListener(this);
         mMore.setOnClickListener(this);
@@ -50,42 +48,35 @@ public class NormalFragment extends BaseFragment implements View.OnClickListener
     }
 
     protected void initView(View mView) {
+        mNotify = (TextView) mView.findViewById(R.id.tv_notify);
         mInfo = (TextView) mView.findViewById(R.id.tv_mine_info);
-        mMessage = (TextView) mView.findViewById(R.id.tv_mine_message);
-        mSetting = (TextView) mView.findViewById(R.id.tv_mine_setting);
         mSearch = (TextView) mView.findViewById(R.id.tv_mine_search);
         mEveryDay = (TextView) mView.findViewById(R.id.tv_every_day);
-        mMore = (TextView) mView.findViewById(R.id.tv_mine_more);
+        mMore = (TextView) mView.findViewById(R.id.main_title_normal_right);
     }
 
+    private static final String TAG = "NormalFragment";
     @Override
     public void onClick(View v) {
+        Log.i(TAG, "NormalFragment.onClick: v="+v);
+        Intent intent=null;
         switch (v.getId()) {
+            case R.id.tv_notify://通知公告界面
+                intent=new Intent(getActivity(), NotifyActivity.class);
+                break;
             case R.id.tv_mine_info://个人信息界面
-                Intent intent_infoself = new Intent(getActivity(), InfoSelfActivity.class);
-                StartActivity.jumpTo(getActivity(), intent_infoself);
-                break;
-            case R.id.tv_mine_message://学历信息界面
-                Intent intent_message = new Intent(getActivity(), InfoEducationActivity.class);
-                StartActivity.jumpTo(getActivity(), intent_message);
-                break;
-            case R.id.tv_mine_setting://职称技能界面
-                Intent intent_setting = new Intent(getActivity(), InfoSkillActivity.class);
-                StartActivity.jumpTo(getActivity(), intent_setting);
+                intent= new Intent(getActivity(), SelfInfoActivity.class);
                 break;
             case R.id.tv_mine_search://密码管理界面
-                Intent intent_search = new Intent(getActivity(), PasswordManagerActivity.class);
-                StartActivity.jumpTo(getActivity(), intent_search);
+                intent= new Intent(getActivity(), PasswordManagerActivity.class);
                 break;
             case R.id.tv_every_day:  //日常考勤
-                Intent intent_every_day = new Intent(getActivity(), EveryDayActivity.class);
-                StartActivity.jumpTo(getActivity(), intent_every_day);
+                intent = new Intent(getActivity(), EveryDayActivity.class);
                 break;
-            case R.id.tv_mine_more://更多界面
-//                Intent intent_more = new Intent(getActivity(), MoreActivity.class);
-//                StartActivity.jumpTo(getActivity(), intent_more);
-                StartActivity.StartActivity(getActivity(), LoginActivity.class);
+            case R.id.main_title_normal_right://退出当前账号，跳转登陆界面
+                logout();
                 break;
         }
+        StartActivity.jumpTo(getActivity(), intent);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.wjx.xing.activitys;
+package com.example.wjx.xing.activitys.normal;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.dialog.EditDialog;
 import com.example.wjx.xing.entitys.Items_message;
 
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InfoSelfActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class InfoBaseActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private ListView mListView;
     private List<Items_message> mList;

@@ -29,6 +29,8 @@ import com.example.wjx.xing.utils.StringUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.function.ToDoubleBiFunction;
+
 /**
  * 输入账号密码时  进度条隐藏
  */
@@ -179,8 +181,10 @@ public class LoginActivity extends BaseActivity {
         }
         //显示进度条
         showProgress(true);
+        // TODO: 2017/5/20 测试登陆
+        executeLogin();
         //初步验证通过 开始访问数据库进行对比
-        String url = Common.baseurl+"LoginServlet?number="+number+"&password="+password;
+        /*String url = Common.baseurl+"LoginServlet?number="+number+"&password="+password;
         JsonObjectRequest request = new JsonObjectRequest(url,null,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -190,12 +194,7 @@ public class LoginActivity extends BaseActivity {
                         //有账号就登录 没有账号就注册
                         Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
                         if("登陆成功".equals(result)){
-                            int curentRole=isManagerBox.isSelected()?2:1;
-                            getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
-                                    .putInt(Common.KEY_ROLE_LOGIN, curentRole).commit();
-                            Intent intent=new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra(Common.KEY_ROLE_LOGIN, curentRole);
-                            StartActivity.StartActivity(LoginActivity.this, intent);
+                           executeLogin();
                         }
                     }
                 } catch (JSONException e) {
@@ -209,10 +208,19 @@ public class LoginActivity extends BaseActivity {
             }
         });
         request.setRetryPolicy(new DefaultRetryPolicy(3*1000, 1, 1.0f));
-        mRequestQueue.add(request);
+        mRequestQueue.add(request);*/
         //隐藏进度条
         showProgress(false);
 
+    }
+
+    private void executeLogin() {
+        int curentRole=isManagerBox.isSelected()?2:1;
+        getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
+                .putInt(Common.KEY_ROLE_LOGIN, curentRole).commit();
+        Intent intent=new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra(Common.KEY_ROLE_LOGIN, curentRole);
+        StartActivity.StartActivity(LoginActivity.this, intent);
     }
 
     /**

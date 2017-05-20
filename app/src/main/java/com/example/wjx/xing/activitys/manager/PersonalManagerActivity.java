@@ -1,5 +1,7 @@
 package com.example.wjx.xing.activitys.manager;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -13,6 +15,8 @@ import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.bean.DepartmentBean;
 import com.example.wjx.xing.bean.PersonalBean;
+import com.example.wjx.xing.dialog.DeletePersonalDialog;
+import com.example.wjx.xing.utils.StartActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,7 @@ public class PersonalManagerActivity extends BaseActivity implements AdapterView
     private PersonalListAdapter adapter;
     private int longClickPosition=-1;
     private PopupWindow popupWindow;
+    private DeletePersonalDialog deletePersonalDialog;
 
 
     @Override
@@ -43,13 +48,22 @@ public class PersonalManagerActivity extends BaseActivity implements AdapterView
 
     @Override
     protected void onClickRight() {
-
+        Intent intent=new Intent(this, AddPersonalActivity.class);
+        StartActivity.jumpTo(this, intent);
     }
 
     @Override
     protected void initData() {
         beanList=new ArrayList<>();
         adapter=new PersonalListAdapter(this, beanList);
+        deletePersonalDialog=new DeletePersonalDialog(this, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO: 2017/5/19 请求接口，删除指定员工
+                beanList.remove(longClickPosition);
+                adapter.notifyDataSetChanged();
+            }
+        });
         popupWindow=new PopupWindow(this);
         View contentView = getLayoutInflater().inflate(R.layout.popwindow_del, null);
         contentView.findViewById(R.id.tv_del).setOnClickListener(this);
@@ -87,6 +101,7 @@ public class PersonalManagerActivity extends BaseActivity implements AdapterView
      * 请求网络，获取员工数据
      */
     private void requestList() {
+        // TODO: 2017/5/19 网络请求，请求员工列表接口
         beanList.clear();
         for (int i = 0; i < 21; i++) {
             beanList.add(new PersonalBean());
@@ -106,7 +121,7 @@ public class PersonalManagerActivity extends BaseActivity implements AdapterView
         switch (v.getId()){
             case R.id.tv_del:
                 if(longClickPosition>=0){
-
+                    deletePersonalDialog.show();
                 }
                 popupWindow.dismiss();
                 break;

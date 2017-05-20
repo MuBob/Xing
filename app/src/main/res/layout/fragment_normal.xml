@@ -10,8 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="10dp">
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_main_title_normal"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -31,7 +32,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="20dp">
+            <TextView
+                android:id="@+id/tv_notify"
+                style="@style/textview_items"
+                android:drawableLeft="@drawable/product_list"
+                android:text="公文通告"
+                />
 
+            <View style="@style/View_line"/>
             <TextView
                 android:id="@+id/tv_mine_info"
                 style="@style/textview_items"
@@ -72,14 +80,6 @@
                 style="@style/textview_items"
                 android:drawableLeft="@drawable/product_list"
                 android:text="日常考勤"
-                />
-
-            <View style="@style/View_line"/>
-            <TextView
-                android:id="@+id/tv_mine_more"
-                style="@style/textview_items"
-                android:drawableLeft="@drawable/more"
-                android:text="退出登陆"
                 />
 
             <View style="@style/View_line"/>

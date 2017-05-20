@@ -2,11 +2,8 @@ package com.example.wjx.xing.activitys;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.wjx.xing.Common;
@@ -17,7 +14,7 @@ import com.example.wjx.xing.utils.StartActivity;
 /**
  * 闪屏界面
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     private static int SUCCESS = 100;
     private SharedPreferences mPreferences;
@@ -30,7 +27,7 @@ public class SplashActivity extends AppCompatActivity {
                 mPreferences = getSharedPreferences(Common.SP_NAME_SETTING, 0);
                 int role = mPreferences.getInt(Common.KEY_ROLE_LOGIN, 0);
                 //测试使用
-                role = 2;
+//                role = 2;
                 if (role>0) {
                     //已经登录过了 
                     Toast.makeText(SplashActivity.this, "欢迎回来", Toast.LENGTH_SHORT).show();
@@ -45,19 +42,36 @@ public class SplashActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected int getResourceId() {
         //设置当前界面无菜单栏 无标题栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_splash);
-        initview();
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        return R.layout.activity_splash;
     }
 
-    /**
-     * 初始化界面
-     */
-    private void initview() {
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected CharSequence getTitleText() {
+        return null;
+    }
+
+    @Override
+    protected void onClickRight() {
+
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void initSet() {
         //两秒之后发送一个标识为 success的空消息
         handler.sendEmptyMessageDelayed(SUCCESS, 2000);
     }
+
 }

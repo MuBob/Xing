@@ -1,4 +1,4 @@
-package com.example.wjx.xing.activitys;
+package com.example.wjx.xing.activitys.normal;
 
 import android.content.Intent;
 import android.icu.util.Calendar;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.activitys.BaseActivity;
+import com.example.wjx.xing.activitys.SignInOutActivity;
 import com.example.wjx.xing.utils.StartActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;

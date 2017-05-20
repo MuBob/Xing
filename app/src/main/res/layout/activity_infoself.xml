@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.wjx.xing.activitys.InfoSelfActivity">
+    tools:context="com.example.wjx.xing.activitys.normal.InfoBaseActivity">
     <include layout="@layout/layout_title"/>
     <ListView
         android:paddingTop="20dp"

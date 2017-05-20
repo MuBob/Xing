@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    style="@style/title_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        style="@style/title_center"
+        android:text="人事专员工作台"
+        />
+
+
+    <TextView
+        android:id="@+id/main_title_manager_right"
+        style="@style/title_right"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:text="退出"
+        />
+</RelativeLayout>
