@@ -17,19 +17,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.utils.StartActivity;
 import com.example.wjx.xing.utils.StringUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.function.ToDoubleBiFunction;
 
 /**
  * 输入账号密码时  进度条隐藏
@@ -184,18 +175,27 @@ public class LoginActivity extends BaseActivity {
         // TODO: 2017/5/20 测试登陆
         executeLogin();
         //初步验证通过 开始访问数据库进行对比
-        /*String url = Common.baseurl+"LoginServlet?number="+number+"&password="+password;
+        /*String url = RequestPath.getLogin(number, password);
+        Log.i("RequestLogin", "LoginActivity.attemptLogin: url="+url);
         JsonObjectRequest request = new JsonObjectRequest(url,null,new Response.Listener<JSONObject>() {
+
             @Override
             public void onResponse(JSONObject response) {
+                Log.i("RequestLogin", "LoginActivity.onResponse: response="+response);
                 try {
-                    String result = response.getString("result");
-                    if(!"".equals(result)){
+                    int code = response.getInt("code");
+                    if(code==0){
                         //有账号就登录 没有账号就注册
-                        Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
-                        if("登陆成功".equals(result)){
-                           executeLogin();
+                        String currentId=response.getString("id");
+                        if(!StringUtil.isNull(currentId)){
+                            saveStrToSP(Common.KEY_CURRENT_ONID, currentId);
+                            executeLogin();
+                        }else {
+                            showToastShort("登陆出现问题！");
                         }
+                    }else{
+                        String msg = response.optString("msg");
+                        showToastShort(msg);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -204,10 +204,10 @@ public class LoginActivity extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("ceshi", "onErrorResponse: fail!"+error.getMessage());
+                Log.i("RequestLogin", "LoginActivity.onErrorResponse: error="+error.getMessage());
             }
         });
-        request.setRetryPolicy(new DefaultRetryPolicy(3*1000, 1, 1.0f));
+//        request.setRetryPolicy(new DefaultRetryPolicy(3*1000, 1, 1.0f));
         mRequestQueue.add(request);*/
         //隐藏进度条
         showProgress(false);
@@ -218,10 +218,9 @@ public class LoginActivity extends BaseActivity {
     private void executeLogin() {
         int curentRole=isManagerBox.isChecked()?2:1;
         Log.i(TAG, "LoginActivity.executeLogin: currentRole="+curentRole);
-        getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
-                .putInt(Common.KEY_ROLE_LOGIN, curentRole).commit();
+        saveIntToSP(Common.KEY_INT_ROLE_LOGIN, curentRole);
         Intent intent=new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra(Common.KEY_ROLE_LOGIN, curentRole);
+        intent.putExtra(Common.KEY_INT_ROLE_LOGIN, curentRole);
         StartActivity.StartActivity(LoginActivity.this, intent);
     }
 

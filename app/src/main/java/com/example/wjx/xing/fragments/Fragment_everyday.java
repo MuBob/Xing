@@ -12,13 +12,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -29,7 +25,6 @@ import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.normal.EvectionActivity;
 import com.example.wjx.xing.activitys.normal.LeaveActivity;
-import com.example.wjx.xing.activitys.MainActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -50,7 +45,7 @@ import static android.content.ContentValues.TAG;
 /**
  * 日常
  */
-public class Fragment_everyday extends Fragment implements OnDateSelectedListener, View.OnClickListener {
+public class Fragment_everyday extends BaseFragment implements OnDateSelectedListener, View.OnClickListener {
 
     private View mView;
     private MaterialCalendarView mCalendar;
@@ -61,22 +56,14 @@ public class Fragment_everyday extends Fragment implements OnDateSelectedListene
     private Button mEvection;
 
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_everyday, null);
-        return mView;
+    protected int getLayoutId() {
+        return R.layout.fragment_everyday;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initView();
-    }
-
-    private void initView() {
-        //日历控件
-        mCalendar = (MaterialCalendarView) mView.findViewById(R.id.calendar_everyday);
+    protected void initSet() {
         mCalendar.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
                 .setMinimumDate(CalendarDay.from(2016, 7, 16))
@@ -86,14 +73,25 @@ public class Fragment_everyday extends Fragment implements OnDateSelectedListene
         //默认选中“今天”
         mCalendar.setDateSelected(CalendarDay.today(), true);
         mCalendar.setOnDateChangedListener(this);
-        //按钮
-        mSign = (Button) mView.findViewById(R.id.btn_everyday_sign);
-        mLeave = (Button) mView.findViewById(R.id.btn_everyday_leave);
-        mEvection = (Button) mView.findViewById(R.id.btn_everyday_evection);
         //添加点击监听事件
         mSign.setOnClickListener(this);
         mLeave.setOnClickListener(this);
         mEvection.setOnClickListener(this);
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void initView(View mView) {
+        //日历控件
+        mCalendar = (MaterialCalendarView) mView.findViewById(R.id.calendar_everyday);
+        //按钮
+        mSign = (Button) mView.findViewById(R.id.btn_everyday_sign);
+        mLeave = (Button) mView.findViewById(R.id.btn_everyday_leave);
+        mEvection = (Button) mView.findViewById(R.id.btn_everyday_evection);
     }
 
     /**
@@ -238,7 +236,7 @@ public class Fragment_everyday extends Fragment implements OnDateSelectedListene
                 break;
         }
         if (request != null) {
-            MainActivity.mRequestQueue.add(request);
+//            MainActivity.mRequestQueue.add(request);
         }
     }
 }

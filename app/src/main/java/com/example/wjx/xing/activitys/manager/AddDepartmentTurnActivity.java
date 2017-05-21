@@ -19,13 +19,13 @@ public class AddDepartmentTurnActivity extends BaseActivity {
 
     private Spinner oldDepartmentSpinner, newDepartmentSpinner, personalSpinner;
     private EditText descEdit;
-    private List<DepartmentBean> oldDepartmentBeanList, newDepartmentBeanList;
+    private List<DepartmentBean> departmentBeanList;
     private List<PersonalBean> personalBeanList;
     private int
             selectOldDepartmentPosition = -1,
             selectNewDepartmentPosition = -1,
             selectPersonalPosition = -1;
-    private DepartmentListAdapter oldDepartmentListAdapter, newDepartmentListAdapter;
+    private DepartmentListAdapter departmentListAdapter;
     private PersonalListAdapter personalListAdapter;
 
     @Override
@@ -45,11 +45,9 @@ public class AddDepartmentTurnActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        oldDepartmentBeanList = new ArrayList<>();
-        newDepartmentBeanList = new ArrayList<>();
+        departmentBeanList = new ArrayList<>();
         personalBeanList = new ArrayList<>();
-        oldDepartmentListAdapter = new DepartmentListAdapter(this, oldDepartmentBeanList);
-        newDepartmentListAdapter = new DepartmentListAdapter(this, newDepartmentBeanList);
+        departmentListAdapter = new DepartmentListAdapter(this, departmentBeanList);
         personalListAdapter = new PersonalListAdapter(this, personalBeanList);
     }
 
@@ -63,8 +61,8 @@ public class AddDepartmentTurnActivity extends BaseActivity {
 
     @Override
     protected void initSet() {
-        oldDepartmentSpinner.setAdapter(oldDepartmentListAdapter);
-        newDepartmentSpinner.setAdapter(newDepartmentListAdapter);
+        oldDepartmentSpinner.setAdapter(departmentListAdapter);
+        newDepartmentSpinner.setAdapter(departmentListAdapter);
         personalSpinner.setAdapter(personalListAdapter);
 
         requestDepartmentList();
@@ -94,5 +92,14 @@ public class AddDepartmentTurnActivity extends BaseActivity {
      */
     private void requestDepartmentList() {
         // TODO: 2017/5/19
+        departmentBeanList.clear();
+        for (int i = 0; i < 21; i++) {
+            departmentBeanList.add(new DepartmentBean());
+            departmentBeanList.get(i).setId(String.valueOf(i + 100));
+            departmentBeanList.get(i).setName("部门名称" + i);
+            departmentBeanList.get(i).setDes("部门介绍" + i);
+        }
+        departmentListAdapter.notifyDataSetChanged();
     }
+
 }

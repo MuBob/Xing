@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
 
 /**
@@ -21,7 +22,7 @@ import com.example.wjx.xing.R;
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     protected JsonObjectRequest mRequest;
-    public static RequestQueue mRequestQueue;
+    public RequestQueue mRequestQueue;
     protected AlertDialog mConfirmDialog;
     protected ProgressDialog mWaitDialog;
 
@@ -138,4 +139,19 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected abstract void initView();
 
     protected abstract void initSet();
+
+    public void saveIntToSP(String key, int value){
+        getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
+                .putInt(key, value).commit();
+    }
+    public int getIntFromSP(String key, int defaultValue){
+        return getSharedPreferences(Common.SP_NAME_SETTING, 0).getInt(key, defaultValue);
+    }
+    public void saveStrToSP(String key, String value){
+        getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
+                .putString(key, value).commit();
+    }
+    public String getStrFromSP(String key, String defaultValue){
+        return getSharedPreferences(Common.SP_NAME_SETTING, 0).getString(key, defaultValue);
+    }
 }

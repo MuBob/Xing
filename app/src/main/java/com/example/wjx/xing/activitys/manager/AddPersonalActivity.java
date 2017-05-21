@@ -90,9 +90,9 @@ public class AddPersonalActivity extends BaseActivity {
     protected void initSet() {
         departmentSpinner.setAdapter(departmentListAdapter);
         roleSpinner.setAdapter(roleSpinnerAdapter);
-        sexSpinner.setAdapter(roleSpinnerAdapter);
-        recordSpinner.setAdapter(roleSpinnerAdapter);
-        skillSpinner.setAdapter(roleSpinnerAdapter);
+        sexSpinner.setAdapter(sexSpinnerAdapter);
+        recordSpinner.setAdapter(recordSpinnerAdapter);
+        skillSpinner.setAdapter(skillSpinnerAdapter);
 
         requestDepartmentList();
         departmentSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -132,5 +132,13 @@ public class AddPersonalActivity extends BaseActivity {
      */
     private void requestDepartmentList() {
         // TODO: 2017/5/19
+        departmentBeanList.clear();
+        for (int i = 0; i < 21; i++) {
+            departmentBeanList.add(new DepartmentBean());
+            departmentBeanList.get(i).setId(String.valueOf(i+100));
+            departmentBeanList.get(i).setName("部门名称"+i);
+            departmentBeanList.get(i).setDes("部门介绍"+i);
+        }
+        departmentListAdapter.notifyDataSetChanged();
     }
 }

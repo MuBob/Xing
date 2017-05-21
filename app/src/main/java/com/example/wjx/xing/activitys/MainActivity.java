@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     protected void initData() {
-        userRole = getIntent().getIntExtra(Common.KEY_ROLE_LOGIN, 1);
+        userRole = getIntent().getIntExtra(Common.KEY_INT_ROLE_LOGIN, 1);
         //给ViewPager添加fragment
         mFragments = new ArrayList<>();
         mFragments.add(new NormalFragment());

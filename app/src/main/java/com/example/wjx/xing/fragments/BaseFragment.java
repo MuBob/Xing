@@ -38,8 +38,8 @@ public abstract class BaseFragment extends Fragment {
     private static final String TAG = "BaseFragment";
     public void logout(){
         Log.i(TAG, "BaseFragment.logout: ");
-        getActivity().getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
-                .putInt(Common.KEY_ROLE_LOGIN, 0).commit();
+        saveIntToSP(Common.KEY_INT_ROLE_LOGIN, 0);
+        saveStrToSP(Common.KEY_CURRENT_ONID, "");
         StartActivity.StartActivity(getActivity(), LoginActivity.class);
     }
 
@@ -48,4 +48,21 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void initData();
 
     protected abstract void initView(View mView);
+
+    public void saveIntToSP(String key, int value){
+        getActivity().getSharedPreferences(Common.SP_NAME_SETTING, 0)
+                .edit()
+                .putInt(key, value).commit();
+    }
+    public int getIntFromSP(String key, int defaultValue){
+        return getActivity().getSharedPreferences(Common.SP_NAME_SETTING, 0)
+                .getInt(key, defaultValue);
+    }
+    public void saveStrToSP(String key, String value){
+        getActivity().getSharedPreferences(Common.SP_NAME_SETTING, 0).edit()
+                .putString(key, value).commit();
+    }
+    public String getStrFromSP(String key, String defaultValue){
+        return getActivity().getSharedPreferences(Common.SP_NAME_SETTING, 0).getString(key, defaultValue);
+    }
 }
