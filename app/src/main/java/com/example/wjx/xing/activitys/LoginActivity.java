@@ -17,10 +17,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.net.RequestPath;
 import com.example.wjx.xing.utils.StartActivity;
 import com.example.wjx.xing.utils.StringUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * 输入账号密码时  进度条隐藏
@@ -172,43 +179,47 @@ public class LoginActivity extends BaseActivity {
         }
         //显示进度条
         showProgress(true);
-        // TODO: 2017/5/20 测试登陆
-        executeLogin();
-        //初步验证通过 开始访问数据库进行对比
-        /*String url = RequestPath.getLogin(number, password);
-        Log.i("RequestLogin", "LoginActivity.attemptLogin: url="+url);
-        JsonObjectRequest request = new JsonObjectRequest(url,null,new Response.Listener<JSONObject>() {
+        if(false){
 
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("RequestLogin", "LoginActivity.onResponse: response="+response);
-                try {
-                    int code = response.getInt("code");
-                    if(code==0){
-                        //有账号就登录 没有账号就注册
-                        String currentId=response.getString("id");
-                        if(!StringUtil.isNull(currentId)){
-                            saveStrToSP(Common.KEY_CURRENT_ONID, currentId);
-                            executeLogin();
-                        }else {
-                            showToastShort("登陆出现问题！");
+            // TODO: 2017/5/20 测试登陆
+            executeLogin();
+        }else {
+            //初步验证通过 开始访问数据库进行对比
+            String url = RequestPath.getLogin(number, password);
+            Log.i("RequestLogin", "LoginActivity.attemptLogin: url=" + url);
+            JsonObjectRequest request = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.i("RequestLogin", "LoginActivity.onResponse: response=" + response);
+                    try {
+                        int code = response.getInt("code");
+                        if (code == 0) {
+                            //有账号就登录 没有账号就注册
+                            String currentId = response.getString("id");
+                            if (!StringUtil.isNull(currentId)) {
+                                saveStrToSP(Common.KEY_CURRENT_ONID, currentId);
+                                executeLogin();
+                            } else {
+                                showToastShort("登陆出现问题！");
+                            }
+                        } else {
+                            String msg = response.optString("msg");
+                            showToastShort(msg);
                         }
-                    }else{
-                        String msg = response.optString("msg");
-                        showToastShort(msg);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("RequestLogin", "LoginActivity.onErrorResponse: error="+error.getMessage());
-            }
-        });
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.i("RequestLogin", "LoginActivity.onErrorResponse: error=" + error.getMessage());
+                }
+            });
 //        request.setRetryPolicy(new DefaultRetryPolicy(3*1000, 1, 1.0f));
-        mRequestQueue.add(request);*/
+            mRequestQueue.add(request);
+        }
         //隐藏进度条
         showProgress(false);
 

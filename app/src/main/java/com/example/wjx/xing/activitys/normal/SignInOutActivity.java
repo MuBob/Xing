@@ -20,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.utils.RequestPath;
+import com.example.wjx.xing.net.RequestPath;
 
 import org.json.JSONException;
 import org.json.JSONObject;
