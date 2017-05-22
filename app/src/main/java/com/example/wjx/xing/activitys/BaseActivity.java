@@ -25,6 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public RequestQueue mRequestQueue;
     protected AlertDialog mConfirmDialog;
     protected ProgressDialog mWaitDialog;
+    protected String currentUid;
 
     private TextView mLeft;
     private TextView mRight;
@@ -37,6 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         try {
             setContentView(getResourceId());
             mRequestQueue = Volley.newRequestQueue(this);
+            currentUid=getStrFromSP(Common.KEY_CURRENT_ONID,"");
             initData();
             mLeft = (TextView) findViewById(R.id.message_left);
             mRight = (TextView) findViewById(R.id.message_right);
@@ -116,11 +118,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public void showToastShort(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+    public void showToastShort(int msgId) {
+        showToastShort(getString(msgId));
+    }
 
     public void showToastLong(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
-
+    public void showToastLong(int msgId) {
+        showToastLong(getString(msgId));
+    }
 
     protected void onClickLeft() {
         Log.i(TAG, "BaseActivity.onClickLeft: ");

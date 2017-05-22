@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.wjx.xing.BuildConfig;
 import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.net.RequestPath;
@@ -152,6 +153,10 @@ public class LoginActivity extends BaseActivity {
         mNumber = (EditText)findViewById(R.id.number_login);
         mPassword = (EditText) findViewById(R.id.password_login);
         isManagerBox = (CheckBox) findViewById(R.id.radio_is_manager);
+        if(BuildConfig.DEBUG){
+            mNumber.setText("123456789");
+            mPassword.setText("111111");
+        }
     }
 
     /**
@@ -194,9 +199,13 @@ public class LoginActivity extends BaseActivity {
                     Log.i("RequestLogin", "LoginActivity.onResponse: response=" + response);
                     try {
                         int code = response.getInt("code");
+                        Log.i("RequestLogin", "LoginActivity.onResponse: code="+code);
                         if (code == 0) {
                             //有账号就登录 没有账号就注册
-                            String currentId = response.getString("id");
+                            JSONObject data=new JSONObject(response.getString("data"));
+                            Log.i("RequestLogin", "LoginActivity.onResponse: data="+data);
+                            String currentId = data.getString("id");
+                            Log.i("RequestLogin", "LoginActivity.onResponse: currentId="+currentId);
                             if (!StringUtil.isNull(currentId)) {
                                 saveStrToSP(Common.KEY_CURRENT_ONID, currentId);
                                 executeLogin();
@@ -214,7 +223,9 @@ public class LoginActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    showToastShort(R.string.error_net);
                     Log.i("RequestLogin", "LoginActivity.onErrorResponse: error=" + error.getMessage());
+                    error.printStackTrace();
                 }
             });
 //        request.setRetryPolicy(new DefaultRetryPolicy(3*1000, 1, 1.0f));

@@ -11,23 +11,21 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.dialog.EditDialog;
 import com.example.wjx.xing.entitys.Items_message;
+import com.example.wjx.xing.net.RequestPath;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InfoBaseActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
@@ -52,10 +50,10 @@ public class InfoBaseActivity extends BaseActivity implements AdapterView.OnItem
             mList = new ArrayList<>();
         }
         mList.clear();
-        mList.add(new Items_message("姓名",""));
-        mList.add(new Items_message("性别",""));
-        mList.add(new Items_message("身份证号",""));
-        mList.add(new Items_message("出生日期",""));
+        mList.add(0, new Items_message("姓名",""));
+        mList.add(1, new Items_message("性别",""));
+        mList.add(2, new Items_message("身份证号",""));
+        mList.add(3, new Items_message("出生日期",""));
         mAdapter = new myAdapter(this, mList);
         editDialog=new EditDialog(this, new EditDialog.OnEditOkClickListener() {
             @Override
@@ -75,33 +73,74 @@ public class InfoBaseActivity extends BaseActivity implements AdapterView.OnItem
     protected void initSet() {
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
+        initNetRequest();
+    }
+
+    private static final String TAG = "InfoBaseActivity";
+
+    private void initNetRequest() {
+        String url= RequestPath.getSelfInfoBase(currentUid);
+        mRequest = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i(TAG, "InfoBaseActivity.onResponse: res="+response);
+                try {
+                    int code = response.getInt("code");
+                    if(code==0){
+                        JSONObject data=new JSONObject(response.optString("data"));
+                        mList.get(0).setValue(data.optString("name"));
+                        mList.get(1).setValue(data.optString("sex"));
+                        mList.get(2).setValue(data.optString("idCard"));
+                        mList.get(3).setValue(data.optString("birthday"));
+                        mAdapter.notifyDataSetChanged();
+                    }else {
+                        String msg = response.optString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                showToastShort(R.string.error_net);
+                Log.i(TAG, "InfoBaseActivity.onErrorResponse: e="+error.getMessage());
+            }
+        });
+        mRequestQueue.add(mRequest);
     }
 
 
     @Override
     protected void onClickRight() {
         //保存
-        String url = Common.baseurl+"infoself?id=1";
-        mRequest = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+        String url = RequestPath.getModifySelfInfoBase(currentUid, mList.get(0).getValue(), mList.get(1).getValue(), mList.get(2).getValue(), mList.get(3).getValue());
+        Log.i(TAG, "InfoBaseActivity.onClickRight: url="+url);
+        JsonObjectRequest request = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.i("ceshi", "onResponse: 访问成功");
+                Log.i(TAG, "InfoBaseActivity.onResponse: res="+response);
+                try {
+                    String msg = response.getString("msg");
+                    showToastShort(msg);
+                    int code=response.getInt("code");
+                    if(code==0){
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("ceshi", "onErrorResponse: 访问失败");
+                Log.i(TAG, "InfoBaseActivity.onErrorResponse: err="+error.getMessage());
+                showToastShort(R.string.error_net);
             }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                // TODO: 2017/5/18  在这里设置需要post的参数
-                Map<String,String> map = new HashMap<String,String>();
-                map.put("姓名","张三");
-                return map;
-            }
-        };
-        mRequestQueue.add(mRequest);
+        });
+        mRequestQueue.add(request);
     }
 
     @Override
