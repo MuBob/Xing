@@ -80,7 +80,7 @@ public class InfoBaseActivity extends BaseActivity implements AdapterView.OnItem
 
     private void initNetRequest() {
         String url= RequestPath.getSelfInfoBase(currentUid);
-        mRequest = new JsonObjectRequest(Request.Method.POST, url, new Response.Listener<JSONObject>() {
+        mRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.i(TAG, "InfoBaseActivity.onResponse: res="+response);

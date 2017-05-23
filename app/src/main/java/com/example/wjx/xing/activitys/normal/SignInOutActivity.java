@@ -48,23 +48,20 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
         super.onClick(v);
         switch (v.getId()) {
             case R.id.btn_sign_in:
-                // TODO: 2017/5/18 网络请求，签到接口
                 getCurrrentLocation();
-                String url = RequestPath.EVERY_DAY_SIGN_IN;
-                url += "id=0";
-                Log.i(TAG, "onClick: " + url);
-                mRequest = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+                String urlSignIn = RequestPath.getEverydaySignIn(currentUid, locationPlace, null);
+                Log.i(TAG, "SignInOutActivity.onClick: urlSignIn="+urlSignIn);
+                mRequest = new JsonObjectRequest(urlSignIn, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            Log.i(TAG, "SignInOutActivity.onResponse: res="+response);
                             mWaitDialog.dismiss();
-                            String result = response.getString("result");
-                            if ("签到成功".equals(result)) {
-                                int count_sign = response.getInt("sign");
-                                int count_evection = response.getInt("evection");
-                                int count_leave = response.getInt("leave");
-                                showToastShort("签到成功");
-                                Log.i(TAG, "SignInOutActivity.onResponse: " + result + "--" + count_sign + "--" + count_leave + "--" + count_evection);
+                            int code = response.getInt("code");
+                            String msg=response.getString("msg");
+                            showToastShort(msg);
+                            if(code==0){
+                                finish();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -80,7 +77,32 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
                 mRequestQueue.add(mRequest);
                 break;
             case R.id.btn_sign_out:
-                // TODO: 2017/5/18  网络请求 签退接口
+                String urlSignOut = RequestPath.getEverydaySignOut(currentUid, locationPlace, null);
+                Log.i(TAG, "SignInOutActivity.onClick: urlSignOut="+urlSignOut);
+                mRequest = new JsonObjectRequest(urlSignOut, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i(TAG, "SignInOutActivity.onResponse: resp="+response);
+                            mWaitDialog.dismiss();
+                            int code = response.getInt("code");
+                            String msg=response.getString("msg");
+                            showToastShort(msg);
+                            if(code==0){
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "onErrorResponse: " + error.getMessage());
+                    }
+                });
+                mWaitDialog.show();
+                mRequestQueue.add(mRequest);
                 break;
         }
     }
@@ -139,6 +161,8 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
 
     }
 
+    private String locationPlace;
+
     private void showLocation() {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         double latitude = 0;
@@ -155,9 +179,10 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
             StringBuilder builder = new StringBuilder();
             if (addresses.size() > 0) {
                 Address address = addresses.get(0);
+                locationPlace=address.getAddressLine(0);
                 Log.i(TAG, "SignInOutActivity.showLocation: addresses=" + addresses);
                 builder.append("当前位置：\n");
-                builder.append(address.getAddressLine(0)).append("\n");
+                builder.append(locationPlace).append("\n");
                 builder.append("(").append(currentTime).append(")");
                 String s = builder.toString();
                 if (locationText != null) {

@@ -5,7 +5,6 @@ import android.icu.util.Calendar;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
@@ -18,9 +17,6 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 public class EveryDayActivity extends BaseActivity implements OnDateSelectedListener {
     private MaterialCalendarView mCalendar;
-    private Button mSign;
-    private Button mLeave;
-    private Button mEvection;
 
     @Override
     protected CharSequence getTitleText() {
