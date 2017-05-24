@@ -29,7 +29,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 点击请假按钮之后  跳转到这
+ * 请假界面
  */
 public class LeaveActivity extends BaseActivity {
 

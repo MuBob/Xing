@@ -15,6 +15,9 @@ import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+/**
+ * 日常考勤
+ */
 public class EveryDayActivity extends BaseActivity implements OnDateSelectedListener {
     private MaterialCalendarView mCalendar;
 
