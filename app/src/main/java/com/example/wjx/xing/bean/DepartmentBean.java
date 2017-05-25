@@ -7,7 +7,7 @@ package com.example.wjx.xing.bean;
 public class DepartmentBean {
     private String name;
     private String id;
-    private String des;
+    private String description;
 
     public DepartmentBean() {
     }
@@ -28,12 +28,12 @@ public class DepartmentBean {
         this.id = id;
     }
 
-    public String getDes() {
-        return des;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDes(String des) {
-        this.des = des;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DepartmentBean {
         return "DepartmentBean{" +
                 "name='" + name + '\'' +
                 ", id='" + id + '\'' +
-                ", des='" + des + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

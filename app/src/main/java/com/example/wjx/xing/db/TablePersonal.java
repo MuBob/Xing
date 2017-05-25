@@ -3,7 +3,6 @@ package com.example.wjx.xing.db;
 public class TablePersonal extends BaseDataBase{
 	private static final long serialVersionUID = 4765815430788924696L;
 	public static final String TABLE_NAME="table_personal";
-	public static final String COLUMN_ID="_id";
 	public static final String COLUMN_UID="id";
 	public static final String COLUMN_PASSWORD="pwd";
 	public static final String COLUMN_NAME="name";

@@ -8,11 +8,10 @@ import android.widget.Spinner;
 import com.example.wjx.xing.Adapters.DepartmentListAdapter;
 import com.example.wjx.xing.Adapters.RecordSpinnerAdapter;
 import com.example.wjx.xing.Adapters.RoleSpinnerAdapter;
-import com.example.wjx.xing.Adapters.StringSpinnerAdapter;
 import com.example.wjx.xing.Adapters.SkillSpinnerAdapter;
+import com.example.wjx.xing.Adapters.StringSpinnerAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.bean.DepartmentBean;
 import com.example.wjx.xing.bean.RecordBean;
 import com.example.wjx.xing.bean.RoleBean;
 import com.example.wjx.xing.bean.SkillBean;
@@ -20,6 +19,7 @@ import com.example.wjx.xing.data.DefaultRecordList;
 import com.example.wjx.xing.data.DefaultRoleList;
 import com.example.wjx.xing.data.DefaultSexList;
 import com.example.wjx.xing.data.DefaultSkillList;
+import com.example.wjx.xing.db.TableDepartment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
 public class AddPersonalActivity extends BaseActivity {
 
     private EditText nameEdit, emaiEdit, passwordEdit;
-    private List<DepartmentBean> departmentBeanList;
+    private List<TableDepartment> departmentBeanList;
     private List<RoleBean> roleBeenList;
     private List<String> sexList;
     private List<RecordBean> recordBeanList;
@@ -134,10 +134,10 @@ public class AddPersonalActivity extends BaseActivity {
         // TODO: 2017/5/19
         departmentBeanList.clear();
         for (int i = 0; i < 21; i++) {
-            departmentBeanList.add(new DepartmentBean());
+            departmentBeanList.add(new TableDepartment());
             departmentBeanList.get(i).setId(String.valueOf(i+100));
             departmentBeanList.get(i).setName("部门名称"+i);
-            departmentBeanList.get(i).setDes("部门介绍"+i);
+            departmentBeanList.get(i).setDescription("部门介绍"+i);
         }
         departmentListAdapter.notifyDataSetChanged();
     }

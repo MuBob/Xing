@@ -7,7 +7,8 @@ public class LogLeave extends BaseDataBase{
 	private static final long serialVersionUID = 3877974455010614135L;
 	public static final String TABLE_NAME="log_leave";
 	public static final String COLUMN_ID="_id";
-	public static final String COLUMN_UID="id_personal";
+	public static final String COLUMN_UID_APPLY="id_apply";
+	public static final String COLUMN_UID_REPLY="id_reply";
 	public static final String COLUMN_TIME_APPLY="time_apply";
 	public static final String COLUMN_DAY_START="day_start";
 	public static final String COLUMN_DAY_END="day_end";
@@ -18,7 +19,9 @@ public class LogLeave extends BaseDataBase{
 	public static final String COLUMN_REPLY_TIME="time_reply";
 	public static final String COLUMN_REPLY_REASON="reason_reply";
 	
-	private String id_personal;
+	private String _id;
+	private String id_apply;
+	private String id_reply;
 	private String time_apply;
 	private String day_start;
 	private String day_end;
@@ -28,11 +31,24 @@ public class LogLeave extends BaseDataBase{
 	private int reply;
 	private String time_reply;
 	private String reason_reply;
-	public String getId_personal() {
-		return id_personal;
+	
+	public String get_id() {
+		return _id;
 	}
-	public void setId_personal(String id_personal) {
-		this.id_personal = id_personal;
+	public void set_id(String _id) {
+		this._id = _id;
+	}
+	public String getId_apply() {
+		return id_apply;
+	}
+	public void setId_apply(String id_apply) {
+		this.id_apply = id_apply;
+	}
+	public String getId_reply() {
+		return id_reply;
+	}
+	public void setId_reply(String id_reply) {
+		this.id_reply = id_reply;
 	}
 	public String getTime_apply() {
 		return time_apply;
@@ -90,8 +106,9 @@ public class LogLeave extends BaseDataBase{
 	}
 	@Override
 	public String toString() {
-		return "LogLeave [id_personal=" + id_personal + ", time_apply=" + time_apply + ", day_start=" + day_start
-				+ ", day_end=" + day_end + ", days=" + days + ", reason=" + reason + ", picture=" + picture + ", reply="
-				+ reply + ", time_reply=" + time_reply + ", reason_reply=" + reason_reply + "]";
+		return "LogLeave [_id=" + _id + ", id_apply=" + id_apply + ", id_reply=" + id_reply + ", time_apply="
+				+ time_apply + ", day_start=" + day_start + ", day_end=" + day_end + ", days=" + days + ", reason="
+				+ reason + ", picture=" + picture + ", reply=" + reply + ", time_reply=" + time_reply
+				+ ", reason_reply=" + reason_reply + "]";
 	}
 }

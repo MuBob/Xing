@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.example.wjx.xing.Adapters.PersonalListAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.bean.DepartmentBean;
 import com.example.wjx.xing.bean.PersonalBean;
+import com.example.wjx.xing.db.TableDepartment;
 import com.example.wjx.xing.dialog.DeletePersonalDialog;
 import com.example.wjx.xing.utils.StartActivity;
 
@@ -109,7 +109,7 @@ public class DepartmentTurnActivity extends BaseActivity implements AdapterView.
             PersonalBean personalBean = beanList.get(i);
             personalBean.setNumber(String.valueOf(i+100));
             personalBean.setName("员工"+i);
-            personalBean.setDepartmentBean(new DepartmentBean());
+            personalBean.setDepartmentBean(new TableDepartment());
             personalBean.getDepartmentBean().setName("职位"+i);
         }
         adapter.notifyDataSetChanged();

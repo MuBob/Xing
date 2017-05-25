@@ -9,9 +9,9 @@ import com.example.wjx.xing.Adapters.PersonalListAdapter;
 import com.example.wjx.xing.Adapters.StringSpinnerAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.bean.DepartmentBean;
 import com.example.wjx.xing.bean.PersonalBean;
 import com.example.wjx.xing.data.DefaultDaysList;
+import com.example.wjx.xing.db.TableDepartment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 public class AddAttendanceActivity extends BaseActivity {
 
     private Spinner departmentSpinner, personalSpinner, daysEvectionSpinner, daysLeaveSpinner, daysAttendanceSpinner;
-    private List<DepartmentBean> departmentBeanList;
+    private List<TableDepartment> departmentBeanList;
     private List<PersonalBean> personalBeanList;
     private List<String> daysOfMonths;
     private int selectDepartmentPosition = -1;

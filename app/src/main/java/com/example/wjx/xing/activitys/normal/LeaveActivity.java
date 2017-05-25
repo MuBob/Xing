@@ -17,13 +17,22 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
+import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.DateUtil;
 import com.example.wjx.xing.utils.SystemUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +47,7 @@ public class LeaveActivity extends BaseActivity {
     private String imageFilePath;
     private ImageView mPicture;
     Dialog mCameraDialog;
+    private EditText dayStart, dayEnd, reason;
     public static final int REQUEST_CODE_CAMERA=102;
     public static final int REQUEST_CODE_PICTURE=103;
 
@@ -71,6 +81,9 @@ public class LeaveActivity extends BaseActivity {
         //上传照片
         mBtn_picture = (Button) findViewById(R.id.btn_leave_picture);
         mBtn_submit = (Button) findViewById(R.id.btn_leave_submit);
+        dayStart = (EditText) findViewById(R.id.et_leave_startLeave);
+        dayEnd = (EditText) findViewById(R.id.et_leave_endLeave);
+        reason = (EditText) findViewById(R.id.et_leave_info);
     }
 
     @Override
@@ -83,7 +96,7 @@ public class LeaveActivity extends BaseActivity {
         super.onClick(v);
         switch(v.getId()){
             case R.id.btn_leave_submit:
-                // TODO: 2017/5/18  网络请求，提交请假申请
+                postApply();
                 break;
             case R.id.btn_leave_picture:
                 mCameraDialog.show();
@@ -115,6 +128,39 @@ public class LeaveActivity extends BaseActivity {
                 mCameraDialog.cancel();
                 break;
         }
+    }
+
+    /**
+     * 网络请求，提交请假申请
+     */
+    private void postApply() {
+        String urlApply = RequestPath.getApplyLeave(currentUid, null, reason.getText().toString(), DateUtil.getCurrentTime(), null, dayStart.getText().toString(), dayEnd.getText().toString());
+        Log.i(TAG, "LeaveActivity.onClick: postApply=" + urlApply);
+        mRequest = new JsonObjectRequest(urlApply, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "LeaveActivity.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    String msg = response.getString("msg");
+                    showToastShort(msg);
+                    if (code == 0) {
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
     @Override

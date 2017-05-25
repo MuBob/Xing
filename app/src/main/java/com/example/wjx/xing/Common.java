@@ -6,7 +6,7 @@ package com.example.wjx.xing;
 
 public class Common {
     //后台服务器地址
-    public final static String baseurl = "http://192.168.0.123:8080/Xing/";
+    public final static String baseurl = "http://192.168.0.102:8080/Xing/";
 
     /**
      * 界面传值或在SharedPreferences中使用的Key

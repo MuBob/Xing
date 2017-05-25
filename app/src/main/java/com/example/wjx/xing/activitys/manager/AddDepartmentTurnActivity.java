@@ -9,8 +9,8 @@ import com.example.wjx.xing.Adapters.DepartmentListAdapter;
 import com.example.wjx.xing.Adapters.PersonalListAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.bean.DepartmentBean;
 import com.example.wjx.xing.bean.PersonalBean;
+import com.example.wjx.xing.db.TableDepartment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class AddDepartmentTurnActivity extends BaseActivity {
 
     private Spinner oldDepartmentSpinner, newDepartmentSpinner, personalSpinner;
     private EditText descEdit;
-    private List<DepartmentBean> departmentBeanList;
+    private List<TableDepartment> departmentBeanList;
     private List<PersonalBean> personalBeanList;
     private int
             selectOldDepartmentPosition = -1,
@@ -94,10 +94,10 @@ public class AddDepartmentTurnActivity extends BaseActivity {
         // TODO: 2017/5/19
         departmentBeanList.clear();
         for (int i = 0; i < 21; i++) {
-            departmentBeanList.add(new DepartmentBean());
+            departmentBeanList.add(new TableDepartment());
             departmentBeanList.get(i).setId(String.valueOf(i + 100));
             departmentBeanList.get(i).setName("部门名称" + i);
-            departmentBeanList.get(i).setDes("部门介绍" + i);
+            departmentBeanList.get(i).setDescription("部门介绍" + i);
         }
         departmentListAdapter.notifyDataSetChanged();
     }

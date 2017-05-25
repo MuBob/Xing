@@ -11,12 +11,21 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Adapters.DepartmentListAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.bean.DepartmentBean;
+import com.example.wjx.xing.bean.DepartmentListDataResponse;
+import com.example.wjx.xing.db.TableDepartment;
 import com.example.wjx.xing.dialog.DeletePersonalDialog;
+import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.GsonUtil;
 import com.example.wjx.xing.utils.StartActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +33,7 @@ import java.util.List;
 public class DepartmentManagerActivity extends BaseActivity implements AdapterView.OnItemLongClickListener{
 
     private ListView departmentListView;
-    private List<DepartmentBean> departmentBeanList;
+    private List<TableDepartment> departmentBeanList;
     private DepartmentListAdapter listAdapter;
     private int longClickPosition=-1;
     private PopupWindow popupWindow;
@@ -103,14 +112,40 @@ public class DepartmentManagerActivity extends BaseActivity implements AdapterVi
      */
     private void requestList() {
         // TODO: 2017/5/19 网络请求，请求部门列表接口
-        departmentBeanList.clear();
-        for (int i = 0; i < 21; i++) {
-            departmentBeanList.add(new DepartmentBean());
-            departmentBeanList.get(i).setId(String.valueOf(i+100));
-            departmentBeanList.get(i).setName("部门名称"+i);
-            departmentBeanList.get(i).setDes("部门介绍"+i);
-        }
-        listAdapter.notifyDataSetChanged();
+        String urlList = RequestPath.getListDepartment();
+        Log.i(TAG, "DepartmentManagerActivity.requestList: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "DepartmentManagerActivity.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        DepartmentListDataResponse departmentList = (DepartmentListDataResponse) GsonUtil.fromJsonToObject(data, DepartmentListDataResponse.class);
+                        departmentBeanList.clear();
+                        if(departmentList!=null&&departmentList.getList()!=null){
+                            departmentBeanList.addAll(departmentList.getList());
+                        }
+                        listAdapter.notifyDataSetChanged();
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "DepartmentManagerActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
     @Override

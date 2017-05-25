@@ -22,6 +22,10 @@ public class RequestPath {
     private static final String PASSWORD_MODIFY=Common.baseurl+"PasswordModifyServlet?id=%s";
     public static final String EVERY_DAY_SIGN_IN= Common.baseurl + "SignInServlet?id=%s";
     public static final String EVERY_DAY_SIGN_OUT= Common.baseurl + "SignOutServlet?id=%s";
+    public static final String APPLY_LEAVE= Common.baseurl + "ApplyLeaveServlet?id=%s";
+    public static final String APPLY_EVECTION= Common.baseurl + "ApplyTripServlet?id=%s";
+    public static final String LIST_DEPARTMENT=Common.baseurl+"DepartmentListGetServlet";
+
 
 
     public static String getLogin(String id, String pwd){
@@ -91,10 +95,12 @@ public class RequestPath {
         StringBuffer url=new StringBuffer(String.format(EVERY_DAY_SIGN_IN, getUrlEncode(id)));
         if(!StringUtil.isNull(place)){
             url.append("&place="+getUrlEncode(place));
-            url.append("&sign="+getUrlEncode("true"));
         }
+        //根据time是否为空，来判断是获取信息列表，还是签到
         if(StringUtil.isNull(time)){
             time= DateUtil.getCurrentTime();
+        }else {
+            url.append("&sign="+getUrlEncode("true"));
         }
         url.append("&time="+time);
         return url.toString();
@@ -112,9 +118,51 @@ public class RequestPath {
         url.append("&time="+time);
         return url.toString();
     }
+    public static String getApplyLeave(String id, String days, String reason, String time, String picture, String startDay, String endDay){
+        StringBuffer url=new StringBuffer(String.format(APPLY_LEAVE, getUrlEncode(id)));
+        if(!StringUtil.isNull(days)){
+            url.append("&days="+getUrlEncode(days));
+        }
+        if(!StringUtil.isNull(startDay)&&!StringUtil.isNull(endDay)){
+            url.append("&startDay="+getUrlEncode(startDay));
+            url.append("&endDay="+getUrlEncode(endDay));
+        }
+        url.append("&reason="+getUrlEncode(reason));
+        if(StringUtil.isNull(time)){
+            time= DateUtil.getCurrentTime();
+        }
+        url.append("&time="+time);
+        if(!StringUtil.isNull(picture)){
+            url.append("&picture="+getUrlEncode(picture));
+        }
+        return url.toString();
+    }
 
 
+    public static String getApplyEvection(String id, String days, String place, String way, String time, String matters, String startDay, String endDay){
+        StringBuffer url=new StringBuffer(String.format(APPLY_EVECTION, getUrlEncode(id)));
+        if(!StringUtil.isNull(days)){
+            url.append("&days="+getUrlEncode(days));
+        }
+        if(!StringUtil.isNull(startDay)&&!StringUtil.isNull(endDay)){
+            url.append("&startDay="+getUrlEncode(startDay));
+            url.append("&endDay="+getUrlEncode(endDay));
+        }
+        url.append("&place="+getUrlEncode(place));
+        url.append("&way="+getUrlEncode(way));
+        if(!StringUtil.isNull(matters)){
+            url.append("&matters="+getUrlEncode(matters));
+        }
+        if(StringUtil.isNull(time)){
+            time= DateUtil.getCurrentTime();
+        }
+        url.append("&time="+time);
+        return url.toString();
+    }
 
+    public static String getListDepartment(){
+        return LIST_DEPARTMENT;
+    }
 
     private static String getUrlEncode(String value) {
         try {

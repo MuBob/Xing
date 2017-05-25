@@ -6,16 +6,16 @@ public class TableSkill extends BaseDataBase {
 	public final static String COLUMN_NAME = "name";
 	public final static String COLUMN_MAX_LEVEL = "max_level";
 	private static final long serialVersionUID = 8901239358437203242L;
-	private String _id;
+	private String id;
 	private String name;
 	private String max_level;
 
-	public String get_id() {
-		return _id;
+	public String getId() {
+		return id;
 	}
 
-	public void set_id(String _id) {
-		this._id = _id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -36,7 +36,7 @@ public class TableSkill extends BaseDataBase {
 
 	@Override
 	public String toString() {
-		return "TableSkillDataBase [_id=" + _id + ", name=" + name + ", max_level=" + max_level + "]";
+		return "TableSkillDataBase [id=" + id + ", name=" + name + ", max_level=" + max_level + "]";
 	}
 
 }

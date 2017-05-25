@@ -1,5 +1,7 @@
 package com.example.wjx.xing.bean;
 
+import com.example.wjx.xing.db.TableDepartment;
+
 import java.util.Date;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Date;
 public class PersonalBean {
     private String name;
     private String number;
-    private DepartmentBean departmentBean;
+    private TableDepartment departmentBean;
     private RoleBean roleBean;
     private RecordBean recordBean;
     private SkillBean skillBean;
@@ -78,11 +80,11 @@ public class PersonalBean {
         this.name = name;
     }
 
-    public DepartmentBean getDepartmentBean() {
+    public TableDepartment getDepartmentBean() {
         return departmentBean;
     }
 
-    public void setDepartmentBean(DepartmentBean departmentBean) {
+    public void setDepartmentBean(TableDepartment departmentBean) {
         this.departmentBean = departmentBean;
     }
 

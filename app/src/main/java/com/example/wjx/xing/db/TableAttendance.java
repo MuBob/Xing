@@ -6,7 +6,6 @@ public class TableAttendance extends BaseDataBase{
 	 */
 	private static final long serialVersionUID = 3332586558812595474L;
 	public static final String TABLE_NAME="table_attendance";
-	public static final String COLUMN_ID="_id";
 	public static final String COLUMN_UID="id_personal";
 	public static final String COLUMN_DAYS_TRIP="days_trip";
 	public static final String COLUMN_DAYS_LEAVE="days_leave";

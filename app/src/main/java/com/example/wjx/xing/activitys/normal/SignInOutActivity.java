@@ -24,6 +24,7 @@ import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.db.LogSignIn;
 import com.example.wjx.xing.db.LogSignOut;
 import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.DateUtil;
 import com.example.wjx.xing.utils.GsonUtil;
 
 import org.json.JSONException;
@@ -34,8 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static android.content.ContentValues.TAG;
 
 public class SignInOutActivity extends BaseActivity implements LocationListener {
 
@@ -56,7 +55,7 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
                 if (v.isSelected()) {
 
                     getCurrrentLocation();
-                    String urlSignIn = RequestPath.getEverydaySignIn(currentUid, locationPlace, null);
+                    String urlSignIn = RequestPath.getEverydaySignIn(currentUid, locationPlace, DateUtil.getCurrentTime());
                     Log.i(TAG, "SignInOutActivity.onClick: urlSignIn=" + urlSignIn);
                     mRequest = new JsonObjectRequest(urlSignIn, null, new Response.Listener<JSONObject>() {
                         @Override
@@ -78,6 +77,7 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.i(TAG, "onErrorResponse: " + error.getMessage());
+                            mWaitDialog.dismiss();
                         }
                     });
                     mWaitDialog.show();
@@ -88,7 +88,7 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
                 break;
             case R.id.btn_sign_out:
                 if(v.isSelected()){
-                    String urlSignOut = RequestPath.getEverydaySignOut(currentUid, locationPlace, null);
+                    String urlSignOut = RequestPath.getEverydaySignOut(currentUid, locationPlace, DateUtil.getCurrentTime());
                     Log.i(TAG, "SignInOutActivity.onClick: urlSignOut=" + urlSignOut);
                     mRequest = new JsonObjectRequest(urlSignOut, null, new Response.Listener<JSONObject>() {
                         @Override
@@ -104,12 +104,14 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                mWaitDialog.dismiss();
                             }
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.i(TAG, "onErrorResponse: " + error.getMessage());
+                            mWaitDialog.dismiss();
                         }
                     });
                     mWaitDialog.show();
@@ -121,6 +123,7 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
         }
     }
 
+    private static final String TAG = "SignInOutActivity";
     @Override
     protected void initSet() {
         getCurrrentLocation();
@@ -139,7 +142,7 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
                     if (code == 0) {
                         String signInStr=response.optString("signInBean");
                         LogSignIn signIn= (LogSignIn) GsonUtil.fromJsonToObject(signInStr, LogSignIn.class);
-                        btnSignIn.setSelected(signIn.getCount()<2);
+                            btnSignIn.setSelected(signIn!=null?signIn.getCount()<2:true);
                     } else {
                         showToastShort("服务器出现异常");
                         btnSignIn.setSelected(false);
@@ -152,10 +155,12 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i(TAG, "onErrorResponse: " + error.getMessage());
+                showToastShort("服务器出现异常");
+                btnSignIn.setSelected(false);
             }
         });
         mRequestQueue.add(requestSignIn);
-        String urlSignOut = RequestPath.getEverydaySignIn(currentUid, null, null);
+        String urlSignOut = RequestPath.getEverydaySignOut(currentUid, null, null);
         Log.i(TAG, "SignInOutActivity.netRequest: urlSignOut=" + urlSignOut);
         JsonObjectRequest requestSignOut = new JsonObjectRequest(urlSignOut, null, new Response.Listener<JSONObject>() {
             @Override
@@ -166,7 +171,7 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
                     if (code == 0) {
                         String signOutStr=response.optString("signOutBean");
                         LogSignOut signOut= (LogSignOut) GsonUtil.fromJsonToObject(signOutStr, LogSignOut.class);
-                        btnSignIn.setSelected(signOut.getCount()<2);
+                        btnSignOut.setSelected(signOut!=null?signOut.getCount()<2:true);
                     } else {
                         showToastShort("服务器出现异常");
                         btnSignOut.setSelected(false);
@@ -179,6 +184,8 @@ public class SignInOutActivity extends BaseActivity implements LocationListener 
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i(TAG, "onErrorResponse: " + error.getMessage());
+                showToastShort("服务器出现异常");
+                btnSignIn.setSelected(false);
             }
         });
         mRequestQueue.add(requestSignOut);

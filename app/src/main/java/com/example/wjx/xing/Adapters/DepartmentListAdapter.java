@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
-import com.example.wjx.xing.bean.DepartmentBean;
+import com.example.wjx.xing.db.TableDepartment;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import java.util.List;
 
 public class DepartmentListAdapter extends BaseAdapter{
     private Context context;
-    private List<DepartmentBean> list;
-    public DepartmentListAdapter(Context context, List<DepartmentBean> list){
+    private List<TableDepartment> list;
+    public DepartmentListAdapter(Context context, List<TableDepartment> list){
         this.context=context;
         this.list=list;
     }
@@ -29,7 +29,7 @@ public class DepartmentListAdapter extends BaseAdapter{
     }
 
     @Override
-    public DepartmentBean getItem(int position) {
+    public TableDepartment getItem(int position) {
         return list.get(position);
     }
 
