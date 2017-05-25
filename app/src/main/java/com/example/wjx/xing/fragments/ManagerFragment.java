@@ -18,7 +18,6 @@ import com.example.wjx.xing.utils.StartActivity;
  */
 public class ManagerFragment extends BaseFragment  implements View.OnClickListener{
 
-    private View mView;
     private TextView departmentText, personnelText, departmentTurnText, attendanceText, replyText, passwordText, moreText;
 
     @Override

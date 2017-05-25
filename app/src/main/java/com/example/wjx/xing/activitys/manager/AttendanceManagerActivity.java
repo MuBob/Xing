@@ -11,13 +11,21 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Adapters.PersonalListAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.bean.PersonalBean;
-import com.example.wjx.xing.db.TableDepartment;
+import com.example.wjx.xing.bean.PersonalListDataResponse;
 import com.example.wjx.xing.dialog.DeletePersonalDialog;
+import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.GsonUtil;
 import com.example.wjx.xing.utils.StartActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,18 +110,41 @@ public class AttendanceManagerActivity extends BaseActivity implements AdapterVi
     }
 
     private void requestList() {
-        // TODO: 2017/5/19 请求网络，获取员工列表数据
-        beanList.clear();
-        for (int i = 0; i < 21; i++) {
-            beanList.add(new PersonalBean());
-
-            PersonalBean personalBean = beanList.get(i);
-            personalBean.setNumber(String.valueOf(i+100));
-            personalBean.setName("员工"+i);
-            personalBean.setDepartmentBean(new TableDepartment());
-            personalBean.getDepartmentBean().setName("职位"+i);
-        }
-        adapter.notifyDataSetChanged();
+        //  请求网络，获取员工列表数据
+        String urlList = RequestPath.getListPersonalAttendance(null);
+        Log.i(TAG, "AttendanceManagerActivity.requestList: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "AttendanceManagerActivity.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        PersonalListDataResponse personalList = (PersonalListDataResponse) GsonUtil.fromJsonToObject(data, PersonalListDataResponse.class);
+                        beanList.clear();
+                        if(personalList!=null&&personalList.getList()!=null){
+                            beanList.addAll(personalList.getList());
+                        }
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "PersonalManagerActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
     @Override

@@ -1,20 +1,19 @@
 package com.example.wjx.xing.bean;
 
-
 import java.util.List;
 
-public class PersonalListDataResponse extends BaseDataResponse {
+public class TurnPersonalListDataResponse extends BaseDataResponse {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8454518505513100649L;
-	private List<PersonalBean> list;
+	private List<TurnPersonalBean> list;
 
-	public List<PersonalBean> getList() {
+	public List<TurnPersonalBean> getList() {
 		return list;
 	}
-	public void setList(List<PersonalBean> list) {
+	public void setList(List<TurnPersonalBean> list) {
 		this.list = list;
 	}
 	@Override

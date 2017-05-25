@@ -45,6 +45,7 @@ import static android.content.ContentValues.TAG;
 /**
  * 日常
  */
+@Deprecated
 public class Fragment_everyday extends BaseFragment implements OnDateSelectedListener, View.OnClickListener {
 
     private View mView;

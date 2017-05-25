@@ -37,7 +37,24 @@
                 android:id="@+id/edit_personal_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nextFocusDown="@+id/tv_department_number"
+                android:nextFocusDown="@+id/edit_personal_number"
+                />
+            <View
+                style="@style/View_line"
+                android:layout_marginTop="12dp"
+                />
+
+            <TextView
+                style="@style/text_view_style"
+                android:text="员工编号"
+                />
+
+            <EditText
+                android:id="@+id/edit_personal_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:nextFocusDown="@+id/edit_personal_password"
                 />
 
             <View
@@ -86,7 +103,7 @@
                 android:id="@+id/edit_personal_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nextFocusDown="@+id/tv_department_number"
+                android:nextFocusDown="@+id/edit_personal_email"
                 />
 
             <View
@@ -119,7 +136,7 @@
                 android:id="@+id/edit_personal_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nextFocusDown="@+id/tv_department_number"
+                android:inputType="textEmailAddress"
                 />
 
             <View

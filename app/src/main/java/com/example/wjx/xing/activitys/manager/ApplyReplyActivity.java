@@ -30,20 +30,20 @@ public class ApplyReplyActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        int replyType=0;
+        int applyType=0;
         switch (v.getId()){
             case R.id.tv_reply_evection:  //出差回复
-                replyType=Common.REPLY_TYPE_EVECTION;
+                applyType=Common.APPLY_TYPE_EVECTION;
                 break;
             case R.id.tv_reply_level:  //请假回复
-                replyType=Common.REPLY_TYPE_LEAVE;
+                applyType=Common.APPLY_TYPE_LEAVE;
                 break;
             default:
                 break;
         }
-        if(replyType>0){
+        if(applyType>0){
             Intent intent=new Intent(this, ReplyActivity.class);
-            intent.putExtra(Common.KEY_REPLY_TYPE, replyType);
+            intent.putExtra(Common.KEY_REPLY_TYPE, applyType);
             StartActivity.jumpTo(this, intent);
         }
     }

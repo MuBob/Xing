@@ -19,7 +19,7 @@ public class DeletePersonalDialog extends BaseDialog {
     @Override
     public Dialog initDialog() {
         AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
-        builder.setMessage("是否删除该名员工");
+        builder.setMessage("是否删除该名员工信息");
         builder.setPositiveButton("仍然删除", onClickListener);
         builder.setNegativeButton("不删除了", new DialogInterface.OnClickListener() {
             @Override

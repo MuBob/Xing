@@ -1,16 +1,27 @@
 package com.example.wjx.xing.activitys.manager;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.wjx.xing.Adapters.PersonalListAdapter;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Adapters.StringSpinnerAdapter;
+import com.example.wjx.xing.Adapters.UnReplyPersonalListAdapter;
 import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.bean.PersonalBean;
+import com.example.wjx.xing.bean.UnReplyPersonalBean;
+import com.example.wjx.xing.bean.UnReplyPersonalListDataResponse;
+import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.DateUtil;
+import com.example.wjx.xing.utils.GsonUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +31,16 @@ public class ReplyActivity extends BaseActivity {
     private TextView applyContentText;
     private int applyType;
     private List<String> replyContentList;
-    private List<PersonalBean> personalBeanList;
+    private List<UnReplyPersonalBean> personalBeanList;
     private StringSpinnerAdapter replyContentAdapter;
-    private PersonalListAdapter personalListAdapter;
-    private int selectReplyContentPosition=-1;
-    private int selectPersonalPosition=-1;
+    private UnReplyPersonalListAdapter personalListAdapter;
+    private int selectReplyContentPosition;
+    private int selectPersonalPosition;
 
     @Override
     protected int getResourceId() {
         return R.layout.activity_reply;
     }
-
 
     @Override
     protected void initData() {
@@ -41,11 +51,21 @@ public class ReplyActivity extends BaseActivity {
             return;
         }
         replyContentList=new ArrayList<>();
-        replyContentList.add(0, "同意你的请假申请，照顾好自己哦");
-        replyContentList.add(1, "同意你的出差申请，注意安全哦");
+        switch (applyType){
+            case Common.APPLY_TYPE_EVECTION:
+                replyContentList.add(0, "同意你的出差申请，注意安全哦");
+                replyContentList.add(1, "拒绝你的出差申请");
+                break;
+            case Common.APPLY_TYPE_LEAVE:
+                replyContentList.add(0, "同意你的请假申请，照顾好自己哦");
+                replyContentList.add(1, "拒绝你的请假申请");
+
+                break;
+default:break;
+        }
         personalBeanList=new ArrayList<>();
         replyContentAdapter=new StringSpinnerAdapter(this, replyContentList);
-        personalListAdapter=new PersonalListAdapter(this, personalBeanList);
+        personalListAdapter=new UnReplyPersonalListAdapter(this, personalBeanList);
     }
 
     @Override
@@ -55,8 +75,8 @@ public class ReplyActivity extends BaseActivity {
 
     @Override
     protected void onClickRight() {
-        // TODO: 2017/5/19 网络请求，点击回复某位员工的某种请求
-
+        // 网络请求，点击回复某位员工的某种请求
+        requestReply(applyType, selectReplyContentPosition+1, personalBeanList.get(selectPersonalPosition).getName(), replyContentList.get(selectReplyContentPosition), DateUtil.getCurrentTime());
     }
 
     @Override
@@ -72,29 +92,37 @@ public class ReplyActivity extends BaseActivity {
         replyContentSpinner.setAdapter(replyContentAdapter);
         applyPersonalSpinner.setAdapter(personalListAdapter);
         requestPersonalList(applyType);
-        replyContentSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        replyContentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectReplyContentPosition=position;
             }
-        });
-        applyPersonalSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        applyPersonalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectPersonalPosition=position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
 
     private void requestPersonalList(int applyType) {
         switch (applyType){
-            case Common.REPLY_TYPE_EVECTION:
-                // TODO: 2017/5/19  网络请求，出差请求人员列表
-
+            case Common.APPLY_TYPE_EVECTION:
+                requestList(Common.APPLY_TYPE_EVECTION);
                 break;
-            case Common.REPLY_TYPE_LEAVE:
-                // TODO: 2017/5/19 网络请求，请假请求人员列表
-
+            case Common.APPLY_TYPE_LEAVE:
+                requestList(Common.APPLY_TYPE_LEAVE);
                 break;
             default:
                 break;
@@ -104,15 +132,109 @@ public class ReplyActivity extends BaseActivity {
     private String getContentStringByApplyType(int applyType) {
         String result="";
         switch (applyType){
-            case  Common.REPLY_TYPE_EVECTION:
+            case  Common.APPLY_TYPE_EVECTION:
                 result="出差";
                 break;
-            case  Common.REPLY_TYPE_LEAVE:
+            case  Common.APPLY_TYPE_LEAVE:
                 result="请假";
                 break;
             default:
                 break;
         }
         return result;
+    }
+
+    private static final String TAG = "ReplyActivity";
+    private void requestList(int applyType) {
+        String urlList=null;
+        switch (applyType){
+            case Common.APPLY_TYPE_EVECTION:
+//                网络请求，出差请求人员列表
+                urlList = RequestPath.getListPersonalUnreplyTrip();
+                break;
+            case Common.APPLY_TYPE_LEAVE:
+                // 网络请求，请假请求人员列表
+                urlList = RequestPath.getListPersonalUnreplyLeave();
+                break;
+            default:
+                break;
+        }
+        Log.i(TAG, "PersonalManagerActivity.requestList: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "PersonalManagerActivity.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        UnReplyPersonalListDataResponse personalList = (UnReplyPersonalListDataResponse) GsonUtil.fromJsonToObject(data, UnReplyPersonalListDataResponse.class);
+                        personalBeanList.clear();
+                        if(personalList!=null&&personalList.getList()!=null){
+                            personalBeanList.addAll(personalList.getList());
+                        }else {
+                            showToastShort("没有员工申请");
+                        }
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "PersonalManagerActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
+        Log.i(TAG, "ReplyActivity.requestTripList: url="+urlList);
+    }
+
+    private void requestReply(int applyType, int replyType, String id, String reason, String time) {
+        String urlList=null;
+        switch (applyType){
+            case Common.APPLY_TYPE_EVECTION:
+//                网络请求，出差请求人员列表
+                urlList = RequestPath.getReplyTrip(id, replyType, reason, time);
+                break;
+            case Common.APPLY_TYPE_LEAVE:
+                // 网络请求，请假请求人员列表
+                urlList=RequestPath.getReplyLeave(id, replyType, reason, time);
+                break;
+            default:
+                break;
+        }
+        Log.i(TAG, "PersonalManagerActivity.requestList: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "PersonalManagerActivity.onResponse: resp=" + response);
+                    mWaitDialog.dismiss();
+                    String msg = response.getString("msg");
+                    showToastShort(msg);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "PersonalManagerActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 }

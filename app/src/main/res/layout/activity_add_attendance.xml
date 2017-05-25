@@ -94,7 +94,7 @@
 
             <TextView
                 style="@style/text_view_style"
-                android:text="出差天数"
+                android:text="旷工天数"
                 />
 
             <Spinner

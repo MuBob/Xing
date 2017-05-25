@@ -1,138 +1,156 @@
 package com.example.wjx.xing.bean;
 
-import com.example.wjx.xing.db.TableDepartment;
 
-import java.util.Date;
+import com.example.wjx.xing.db.TablePersonal;
 
 /**
  * Created by Administrator on 2017/5/18.
  */
 
 public class PersonalBean {
-    private String name;
-    private String number;
-    private TableDepartment departmentBean;
-    private RoleBean roleBean;
-    private RecordBean recordBean;
-    private SkillBean skillBean;
-    private String password;
-    private Date birthday;
-    private int sex;  //性别，1=男性，2=女性
-    private double leaveDays;     //请假天数
-    private double evectionDays;//出差天数
-    private double absenteeismDays;//旷工天数
+	private String name;
+	private String department;
+	private String id;
+	private String role;
+	private String email;
+	private String highRecord;
+	private String title;
+	private String password;
+	private String birthday;
+	private String sex;
+	private double tripDays;
+	private double leaveDays;
+	private double absenteenismDays;
 
-    @Override
-    public String toString() {
-        return "PersonalBean{" +
-                "name='" + name + '\'' +
-                ", number='" + number + '\'' +
-                ", departmentBean=" + departmentBean +
-                ", roleBean=" + roleBean +
-                ", recordBean=" + recordBean +
-                ", skillBean=" + skillBean +
-                ", password='" + password + '\'' +
-                ", birthday=" + birthday +
-                ", sex=" + sex +
-                ", leaveDays=" + leaveDays +
-                ", evectionDays=" + evectionDays +
-                ", absenteeismDays=" + absenteeismDays +
-                '}';
-    }
+	public PersonalBean() {
+		super();
+	}
 
-    public double getLeaveDays() {
-        return leaveDays;
-    }
+	public PersonalBean(TablePersonal personal) {
+		this();
+		if (personal != null) {
+			setName(personal.getName());
+			setId(personal.getId());
+			setRole(personal.getRole());
+			setEmail(personal.getEmail());
+			setHighRecord(personal.getHigh_record());
+			setTitle(personal.getTitle());
+			setPassword(personal.getPwd());
+			setBirthday(personal.getBirthday());
+			setSex(personal.getSex());
+		}
+	}
 
-    public void setLeaveDays(double leaveDays) {
-        this.leaveDays = leaveDays;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public double getEvectionDays() {
-        return evectionDays;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setEvectionDays(double evectionDays) {
-        this.evectionDays = evectionDays;
-    }
+	public String getDepartment() {
+		return department;
+	}
 
-    public double getAbsenteeismDays() {
-        return absenteeismDays;
-    }
+	public void setDepartment(String department) {
+		this.department = department;
+	}
 
-    public void setAbsenteeismDays(double absenteeismDays) {
-        this.absenteeismDays = absenteeismDays;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getNumber() {
-        return number;
-    }
+	public String getRole() {
+		return role;
+	}
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
+	public void setRole(String role) {
+		this.role = role;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public TableDepartment getDepartmentBean() {
-        return departmentBean;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setDepartmentBean(TableDepartment departmentBean) {
-        this.departmentBean = departmentBean;
-    }
+	public String getHighRecord() {
+		return highRecord;
+	}
 
-    public RoleBean getRoleBean() {
-        return roleBean;
-    }
+	public void setHighRecord(String highRecord) {
+		this.highRecord = highRecord;
+	}
 
-    public void setRoleBean(RoleBean roleBean) {
-        this.roleBean = roleBean;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public RecordBean getRecordBean() {
-        return recordBean;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setRecordBean(RecordBean recordBean) {
-        this.recordBean = recordBean;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public SkillBean getSkillBean() {
-        return skillBean;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setSkillBean(SkillBean skillBean) {
-        this.skillBean = skillBean;
-    }
+	public String getBirthday() {
+		return birthday;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getSex() {
+		return sex;
+	}
 
-    public Date getBirthday() {
-        return birthday;
-    }
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
+	public double getTripDays() {
+		return tripDays;
+	}
 
-    public int getSex() {
-        return sex;
-    }
+	public void setTripDays(double tripDays) {
+		this.tripDays = tripDays;
+	}
 
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
+	public double getLeaveDays() {
+		return leaveDays;
+	}
+
+	public void setLeaveDays(double leaveDays) {
+		this.leaveDays = leaveDays;
+	}
+
+	public double getAbsenteenismDays() {
+		return absenteenismDays;
+	}
+
+	public void setAbsenteenismDays(double absenteenismDays) {
+		this.absenteenismDays = absenteenismDays;
+	}
+
+	@Override
+	public String toString() {
+		return "PersonalBean [name=" + name + ", department=" + department + ", id=" + id + ", role=" + role
+				+ ", email=" + email + ", highRecord=" + highRecord + ", title=" + title + ", password=" + password
+				+ ", birthday=" + birthday + ", sex=" + sex + ", tripDays=" + tripDays + ", leaveDays=" + leaveDays
+				+ ", absenteenismDays=" + absenteenismDays + "]";
+	}
+	
 }

@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
-import com.example.wjx.xing.bean.PersonalBean;
+import com.example.wjx.xing.bean.TurnPersonalBean;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ import java.util.List;
  * Created by Administrator on 2017/5/18.
  */
 
-public class PersonalListAdapter extends BaseAdapter{
+public class TurnPersonalListAdapter extends BaseAdapter{
     private Context context;
-    private List<PersonalBean> list;
-    public PersonalListAdapter(Context context, List<PersonalBean> list){
+    private List<TurnPersonalBean> list;
+    public TurnPersonalListAdapter(Context context, List<TurnPersonalBean> list){
         this.context=context;
         this.list=list;
     }
@@ -29,7 +29,7 @@ public class PersonalListAdapter extends BaseAdapter{
     }
 
     @Override
-    public PersonalBean getItem(int position) {
+    public TurnPersonalBean getItem(int position) {
         return list.get(position);
     }
 
@@ -49,11 +49,12 @@ public class PersonalListAdapter extends BaseAdapter{
         }else {
             holder= (ViewHolder) convertView.getTag();
         }
-        PersonalBean personalBean = list.get(position);
+        TurnPersonalBean personalBean = list.get(position);
         holder.nameText.setText(personalBean.getName());
-        holder.departmentText.setText(personalBean.getDepartment());
+        holder.departmentText.setText(personalBean.getToDepartment());
         return convertView;
     }
+
 
     public class ViewHolder{
         private TextView nameText;

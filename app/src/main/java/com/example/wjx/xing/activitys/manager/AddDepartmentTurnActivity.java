@@ -1,16 +1,27 @@
 package com.example.wjx.xing.activitys.manager;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Adapters.DepartmentListAdapter;
 import com.example.wjx.xing.Adapters.PersonalListAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
+import com.example.wjx.xing.bean.DepartmentListDataResponse;
 import com.example.wjx.xing.bean.PersonalBean;
+import com.example.wjx.xing.bean.PersonalListDataResponse;
 import com.example.wjx.xing.db.TableDepartment;
+import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.GsonUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +33,8 @@ public class AddDepartmentTurnActivity extends BaseActivity {
     private List<TableDepartment> departmentBeanList;
     private List<PersonalBean> personalBeanList;
     private int
-            selectOldDepartmentPosition = -1,
-            selectNewDepartmentPosition = -1,
-            selectPersonalPosition = -1;
+            selectNewDepartmentPosition,
+            selectPersonalPosition;
     private DepartmentListAdapter departmentListAdapter;
     private PersonalListAdapter personalListAdapter;
 
@@ -38,9 +48,40 @@ public class AddDepartmentTurnActivity extends BaseActivity {
         return "新增调转信息";
     }
 
+    private static final String TAG = "AddDepartmentTurnActiviy";
     @Override
     protected void onClickRight() {
-        // TODO: 2017/5/19 网络请求，修改员工所属部门
+        //网络请求，修改员工所属部门
+        String addUrl = RequestPath.getTurnPersonalDepartment(
+                personalBeanList.get(selectPersonalPosition).getId(),
+                departmentBeanList.get(selectNewDepartmentPosition).getId(),
+                descEdit.getText().toString());
+        Log.i(TAG, "AddDepartmentTurnActivity.onClickRight: url="+addUrl);
+        mRequest = new JsonObjectRequest(addUrl, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                mWaitDialog.dismiss();
+                try {
+                    Log.i(TAG, "AddDepartmentTurnActivity.onResponse: res="+response);
+                    String msg = response.getString("msg");
+                    showToastShort(msg);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "AddDepartmentTurnActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
     @Override
@@ -66,40 +107,125 @@ public class AddDepartmentTurnActivity extends BaseActivity {
         personalSpinner.setAdapter(personalListAdapter);
 
         requestDepartmentList();
-
-        oldDepartmentSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        oldDepartmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectOldDepartmentPosition = position;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                requestPersonalInDepartment(departmentBeanList.get(position).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        newDepartmentSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        newDepartmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectNewDepartmentPosition = position;
             }
-        });
-        personalSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectPersonalPosition = position;
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+        personalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectPersonalPosition = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    /**
+     * 根据当前部门选择员工列表
+     * @param dId
+     */
+    private void requestPersonalInDepartment(String dId) {
+        String urlList = RequestPath.getListPersonal(dId);
+        Log.i(TAG, "AddDepartmentTurnActivity.requestPersonalInDepartment: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "AddDepartmentTurnActivity.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        PersonalListDataResponse personalList = (PersonalListDataResponse) GsonUtil.fromJsonToObject(data, PersonalListDataResponse.class);
+                        personalBeanList.clear();
+                        if(personalList!=null&&personalList.getList()!=null){
+                            personalBeanList.addAll(personalList.getList());
+                        }else {
+                            showToastShort("当前部门下还没有员工");
+                        }
+                        personalListAdapter.notifyDataSetChanged();
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "AddDepartmentTurnActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
     /**
      * 网络请求部门列表数据
      */
     private void requestDepartmentList() {
-        // TODO: 2017/5/19
-        departmentBeanList.clear();
-        for (int i = 0; i < 21; i++) {
-            departmentBeanList.add(new TableDepartment());
-            departmentBeanList.get(i).setId(String.valueOf(i + 100));
-            departmentBeanList.get(i).setName("部门名称" + i);
-            departmentBeanList.get(i).setDescription("部门介绍" + i);
-        }
-        departmentListAdapter.notifyDataSetChanged();
+        String urlList = RequestPath.getListDepartment();
+        Log.i(TAG, "AddDepartmentTurnActivity.requestList: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "AddDepartmentTurnActivity.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        DepartmentListDataResponse departmentList = (DepartmentListDataResponse) GsonUtil.fromJsonToObject(data, DepartmentListDataResponse.class);
+                        departmentBeanList.clear();
+                        if(departmentList!=null&&departmentList.getList()!=null){
+                            departmentBeanList.addAll(departmentList.getList());
+                        }else{
+                            showToastShort("没有所属部门，请先添加部门信息");
+                        }
+                        departmentListAdapter.notifyDataSetChanged();
+                        oldDepartmentSpinner.setSelection(0);
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "AddDepartmentTurnActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
 }

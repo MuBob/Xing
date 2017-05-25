@@ -11,13 +11,21 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Adapters.PersonalListAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
 import com.example.wjx.xing.bean.PersonalBean;
-import com.example.wjx.xing.db.TableDepartment;
+import com.example.wjx.xing.bean.PersonalListDataResponse;
 import com.example.wjx.xing.dialog.DeletePersonalDialog;
+import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.GsonUtil;
 import com.example.wjx.xing.utils.StartActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +68,34 @@ public class PersonalManagerActivity extends BaseActivity implements AdapterView
         deletePersonalDialog=new DeletePersonalDialog(this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO: 2017/5/19 请求接口，删除指定员工
-                beanList.remove(longClickPosition);
-                adapter.notifyDataSetChanged();
+                String delUrl = RequestPath.getDeletePersonal(beanList.get(longClickPosition).getId());
+                Log.i(TAG, "DeletePersonalDialog.onClick: url="+delUrl);
+                mRequest = new JsonObjectRequest(delUrl, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i(TAG, "DeletePersonalDialog.onResponse: resp=" + response);
+                            int code = response.getInt("code");
+                            if (code == 0) {
+                                beanList.remove(longClickPosition);
+                                adapter.notifyDataSetChanged();
+                            }
+                            String msg = response.getString("msg");
+                            showToastShort(msg);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mWaitDialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "DepartmentManagerActivity.onErrorResponse: " + error.getMessage());
+                        mWaitDialog.dismiss();
+                    }
+                });
+                mWaitDialog.show();
+                mRequestQueue.add(mRequest);
             }
         });
         popupWindow=new PopupWindow(this);
@@ -106,18 +139,40 @@ public class PersonalManagerActivity extends BaseActivity implements AdapterView
      * 请求网络，获取员工数据
      */
     private void requestList() {
-        // TODO: 2017/5/19 网络请求，请求员工列表接口
-        beanList.clear();
-        for (int i = 0; i < 21; i++) {
-            beanList.add(new PersonalBean());
-
-            PersonalBean personalBean = beanList.get(i);
-            personalBean.setNumber(String.valueOf(i+100));
-            personalBean.setName("员工"+i);
-            personalBean.setDepartmentBean(new TableDepartment());
-            personalBean.getDepartmentBean().setName("职位"+i);
-        }
-        adapter.notifyDataSetChanged();
+        String urlList = RequestPath.getListPersonal(null);
+        Log.i(TAG, "PersonalManagerActivity.requestList: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "PersonalManagerActivity.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        PersonalListDataResponse personalList = (PersonalListDataResponse) GsonUtil.fromJsonToObject(data, PersonalListDataResponse.class);
+                        beanList.clear();
+                        if(personalList!=null&&personalList.getList()!=null){
+                            beanList.addAll(personalList.getList());
+                        }
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "PersonalManagerActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
     @Override

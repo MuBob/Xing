@@ -1,35 +1,47 @@
 package com.example.wjx.xing.activitys.manager;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.Adapters.DepartmentListAdapter;
 import com.example.wjx.xing.Adapters.PersonalListAdapter;
 import com.example.wjx.xing.Adapters.StringSpinnerAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
+import com.example.wjx.xing.bean.DepartmentListDataResponse;
 import com.example.wjx.xing.bean.PersonalBean;
+import com.example.wjx.xing.bean.PersonalListDataResponse;
+import com.example.wjx.xing.bean.TurnPersonalListDataResponse;
 import com.example.wjx.xing.data.DefaultDaysList;
 import com.example.wjx.xing.db.TableDepartment;
+import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.GsonUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddAttendanceActivity extends BaseActivity {
 
-    private Spinner departmentSpinner, personalSpinner, daysEvectionSpinner, daysLeaveSpinner, daysAttendanceSpinner;
+    private Spinner departmentSpinner, personalSpinner, daysEvectionSpinner, daysLeaveSpinner, daysAbsenteeismSpinner;
     private List<TableDepartment> departmentBeanList;
     private List<PersonalBean> personalBeanList;
     private List<String> daysOfMonths;
-    private int selectDepartmentPosition = -1;
-    private int selectPersonalPosition = -1;
-    private int selectDaysEvectionPosition = -1;
-    private int selectDaysLeavePosition = -1;
-    private int selectDaysAttendancePosition = -1;
+    private int selectDepartmentPosition;
+    private int selectPersonalPosition ;
+    private int selectDaysEvectionPosition;
+    private int selectDaysLeavePosition;
+    private int selectDaysAbsenteeism;
     private DepartmentListAdapter departmentListAdapter;
     private PersonalListAdapter personalListAdapter;
-    private StringSpinnerAdapter daysEvectionAdapter, daysLeaveAdapter, daysAttendanceAdapter;
+    private StringSpinnerAdapter daysEvectionAdapter, daysLeaveAdapter, daysAbsenteeismAdapter;
 
     @Override
     protected int getResourceId() {
@@ -41,9 +53,42 @@ public class AddAttendanceActivity extends BaseActivity {
         return "添加考勤信息";
     }
 
+    /**
+     * 网络请求，添加一条考勤信息
+     */
     @Override
     protected void onClickRight() {
-        // TODO: 2017/5/19 网络请求，添加一条考勤信息
+        String addUrl = RequestPath.getAddAttendance(
+                personalBeanList.get(selectPersonalPosition).getId(),
+                Double.parseDouble(daysOfMonths.get(selectDaysEvectionPosition)),
+                Double.parseDouble(daysOfMonths.get(selectDaysLeavePosition)),
+                Double.parseDouble(daysOfMonths.get(selectDaysAbsenteeism)));
+        Log.i(TAG, "AddDepartmentTurnActivity.onClickRight: url="+addUrl);
+        mRequest = new JsonObjectRequest(addUrl, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                mWaitDialog.dismiss();
+                try {
+                    Log.i(TAG, "AddDepartmentTurnActivity.onResponse: res="+response);
+                    String msg = response.getString("msg");
+                    showToastShort(msg);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "AddDepartmentTurnActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
     @Override
@@ -55,7 +100,7 @@ public class AddAttendanceActivity extends BaseActivity {
         personalListAdapter = new PersonalListAdapter(this, personalBeanList);
         daysEvectionAdapter = new StringSpinnerAdapter(this, daysOfMonths);
         daysLeaveAdapter = new StringSpinnerAdapter(this, daysOfMonths);
-        daysAttendanceAdapter = new StringSpinnerAdapter(this, daysOfMonths);
+        daysAbsenteeismAdapter = new StringSpinnerAdapter(this, daysOfMonths);
     }
 
     @Override
@@ -64,7 +109,7 @@ public class AddAttendanceActivity extends BaseActivity {
         personalSpinner = (Spinner) findViewById(R.id.spinner_select_personal);
         daysEvectionSpinner = (Spinner) findViewById(R.id.spinner_select_days_evection);
         daysLeaveSpinner = (Spinner) findViewById(R.id.spinner_select_days_leave);
-        daysAttendanceSpinner = (Spinner) findViewById(R.id.spinner_select_days_attendance);
+        daysAbsenteeismSpinner = (Spinner) findViewById(R.id.spinner_select_days_attendance);
     }
 
     @Override
@@ -73,46 +118,181 @@ public class AddAttendanceActivity extends BaseActivity {
         personalSpinner.setAdapter(personalListAdapter);
         daysEvectionSpinner.setAdapter(daysEvectionAdapter);
         daysLeaveSpinner.setAdapter(daysLeaveAdapter);
-        daysAttendanceSpinner.setAdapter(daysAttendanceAdapter);
+        daysAbsenteeismSpinner.setAdapter(daysAbsenteeismAdapter);
 
         requestDepartmentList();
 
-        departmentSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        departmentSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectDepartmentPosition = position;
+                requestPersonalInDepartment(departmentBeanList.get(position).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        personalSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        personalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectPersonalPosition = position;
+                requestPersonalAttendance(personalBeanList.get(position).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        daysEvectionSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        daysEvectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectDaysEvectionPosition = position;
             }
-        });
-        daysLeaveSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectDaysLeavePosition = position;
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        daysAttendanceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        daysLeaveSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectDaysAttendancePosition = position;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectDaysLeavePosition = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        daysAbsenteeismSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectDaysAbsenteeism = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
 
     /**
+     * 根据当前部门选择员工列表
+     * @param dId
+     */
+    private void requestPersonalInDepartment(String dId) {
+        String urlList = RequestPath.getListPersonal(dId);
+        Log.i(TAG, "AddAttendanceActivity.requestPersonalInDepartment: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "AddAttendanceActivity.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        PersonalListDataResponse personalList = (PersonalListDataResponse) GsonUtil.fromJsonToObject(data, PersonalListDataResponse.class);
+                        personalBeanList.clear();
+                        if(personalList!=null&&personalList.getList()!=null){
+                            personalBeanList.addAll(personalList.getList());
+                        }
+                        personalListAdapter.notifyDataSetChanged();
+                        personalSpinner.setSelection(0);
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "AddAttendanceActivity.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
+    }
+    private static final String TAG = "AddAttendanceActivity";
+    /**
      * 网络请求部门列表数据
      */
     private void requestDepartmentList() {
-        // TODO: 2017/5/19
+        String urlList = RequestPath.getListDepartment();
+        Log.i(TAG, "AddAttendanceActivity.requestDepartmentList: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "AddAttendanceActivity.requestDepartmentList.onResponse: resp=" + response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        DepartmentListDataResponse departmentList = (DepartmentListDataResponse) GsonUtil.fromJsonToObject(data, DepartmentListDataResponse.class);
+                        departmentBeanList.clear();
+                        if(departmentList!=null&&departmentList.getList()!=null){
+                            departmentBeanList.addAll(departmentList.getList());
+                        }
+                        departmentListAdapter.notifyDataSetChanged();
+                        departmentSpinner.setSelection(0);
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(TAG, "AddAttendanceActivity.requestDepartmentList.onErrorResponse: " + error.getMessage());
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
+    }
+
+    private void requestPersonalAttendance(String id) {
+        String urlList = RequestPath.getListPersonalTurn(id);
+        Log.i(TAG, "AddAttendanceActivity.requestPersonalAttendance: url="+urlList);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "AddAttendanceActivity.onResponse: res="+response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        TurnPersonalListDataResponse personalList = (TurnPersonalListDataResponse) GsonUtil.fromJsonToObject(data, TurnPersonalListDataResponse.class);
+
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 }

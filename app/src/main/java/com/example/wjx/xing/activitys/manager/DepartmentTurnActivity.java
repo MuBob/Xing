@@ -11,13 +11,21 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.example.wjx.xing.Adapters.PersonalListAdapter;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.wjx.xing.Adapters.TurnPersonalListAdapter;
 import com.example.wjx.xing.R;
 import com.example.wjx.xing.activitys.BaseActivity;
-import com.example.wjx.xing.bean.PersonalBean;
-import com.example.wjx.xing.db.TableDepartment;
+import com.example.wjx.xing.bean.TurnPersonalBean;
+import com.example.wjx.xing.bean.TurnPersonalListDataResponse;
 import com.example.wjx.xing.dialog.DeletePersonalDialog;
+import com.example.wjx.xing.net.RequestPath;
+import com.example.wjx.xing.utils.GsonUtil;
 import com.example.wjx.xing.utils.StartActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +42,9 @@ public class DepartmentTurnActivity extends BaseActivity implements AdapterView.
         return "部门调转";
     }
     private ListView listView;
-    private List<PersonalBean> beanList;
-    private PersonalListAdapter adapter;
-    private int longClickPosition=-1;
+    private List<TurnPersonalBean> beanList;
+    private TurnPersonalListAdapter adapter;
+    private int longClickPosition;
     private PopupWindow popupWindow;
     private DeletePersonalDialog deletePersonalDialog;
 
@@ -55,12 +63,38 @@ public class DepartmentTurnActivity extends BaseActivity implements AdapterView.
     @Override
     protected void initData() {
         beanList=new ArrayList<>();
-        adapter=new PersonalListAdapter(this, beanList);
+        adapter=new TurnPersonalListAdapter(this, beanList);
         deletePersonalDialog=new DeletePersonalDialog(this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                beanList.remove(longClickPosition);
-                adapter.notifyDataSetChanged();
+                String delUrl = RequestPath.getDeletePersonalTurn(beanList.get(longClickPosition).getPersonalId());
+                Log.i(TAG, "DeletePersonalDialog.onClick: url="+delUrl);
+                mRequest = new JsonObjectRequest(delUrl, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i(TAG, "DeletePersonalDialog.onResponse: resp=" + response);
+                            int code = response.getInt("code");
+                            if (code == 0) {
+                                beanList.remove(longClickPosition);
+                                adapter.notifyDataSetChanged();
+                            }
+                            String msg = response.getString("msg");
+                            showToastShort(msg);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mWaitDialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "DepartmentManagerActivity.onErrorResponse: " + error.getMessage());
+                        mWaitDialog.dismiss();
+                    }
+                });
+                mWaitDialog.show();
+                mRequestQueue.add(mRequest);
             }
         });
         popupWindow=new PopupWindow(this);
@@ -75,7 +109,7 @@ public class DepartmentTurnActivity extends BaseActivity implements AdapterView.
 
     @Override
     protected void initView() {
-        listView = (ListView) findViewById(R.id.list_view_personal);
+        listView = (ListView) findViewById(R.id.list_view_department_personal);
     }
 
     @Override
@@ -100,19 +134,42 @@ public class DepartmentTurnActivity extends BaseActivity implements AdapterView.
         requestList();
     }
 
+    /**
+     * 请求网络，获取员工列表数据
+     */
     private void requestList() {
-        // TODO: 2017/5/19 请求网络，获取员工列表数据
-        beanList.clear();
-        for (int i = 0; i < 21; i++) {
-            beanList.add(new PersonalBean());
-
-            PersonalBean personalBean = beanList.get(i);
-            personalBean.setNumber(String.valueOf(i+100));
-            personalBean.setName("员工"+i);
-            personalBean.setDepartmentBean(new TableDepartment());
-            personalBean.getDepartmentBean().setName("职位"+i);
-        }
-        adapter.notifyDataSetChanged();
+        String urlList = RequestPath.getListPersonalTurn(null);
+        mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.i(TAG, "DepartmentTurnActivity.onResponse: res="+response);
+                    int code = response.getInt("code");
+                    if (code == 0) {
+                        String data=response.getString("data");
+                        TurnPersonalListDataResponse personalList = (TurnPersonalListDataResponse) GsonUtil.fromJsonToObject(data, TurnPersonalListDataResponse.class);
+                        beanList.clear();
+                        if(personalList!=null&&personalList.getList()!=null){
+                            beanList.addAll(personalList.getList());
+                        }
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        String msg = response.getString("msg");
+                        showToastShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mWaitDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mWaitDialog.dismiss();
+            }
+        });
+        mWaitDialog.show();
+        mRequestQueue.add(mRequest);
     }
 
     @Override

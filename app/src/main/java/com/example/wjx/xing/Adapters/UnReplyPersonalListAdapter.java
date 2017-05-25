@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.wjx.xing.R;
-import com.example.wjx.xing.bean.PersonalBean;
+import com.example.wjx.xing.bean.UnReplyPersonalBean;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ import java.util.List;
  * Created by Administrator on 2017/5/18.
  */
 
-public class PersonalListAdapter extends BaseAdapter{
+public class UnReplyPersonalListAdapter extends BaseAdapter{
     private Context context;
-    private List<PersonalBean> list;
-    public PersonalListAdapter(Context context, List<PersonalBean> list){
+    private List<UnReplyPersonalBean> list;
+    public UnReplyPersonalListAdapter(Context context, List<UnReplyPersonalBean> list){
         this.context=context;
         this.list=list;
     }
@@ -29,7 +29,7 @@ public class PersonalListAdapter extends BaseAdapter{
     }
 
     @Override
-    public PersonalBean getItem(int position) {
+    public UnReplyPersonalBean getItem(int position) {
         return list.get(position);
     }
 
@@ -49,9 +49,8 @@ public class PersonalListAdapter extends BaseAdapter{
         }else {
             holder= (ViewHolder) convertView.getTag();
         }
-        PersonalBean personalBean = list.get(position);
+        UnReplyPersonalBean personalBean = list.get(position);
         holder.nameText.setText(personalBean.getName());
-        holder.departmentText.setText(personalBean.getDepartment());
         return convertView;
     }
 

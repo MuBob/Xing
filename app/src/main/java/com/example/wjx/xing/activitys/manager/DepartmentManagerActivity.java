@@ -75,9 +75,34 @@ public class DepartmentManagerActivity extends BaseActivity implements AdapterVi
         deletePersonalDialog=new DeletePersonalDialog(this, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO: 2017/5/19 请求网络，删除指定部门
-                departmentBeanList.remove(longClickPosition);
-                listAdapter.notifyDataSetChanged();
+                String delUrl = RequestPath.getDeleteDepartment(departmentBeanList.get(longClickPosition).getId());
+                Log.i(TAG, "DeletePersonalDialog.onClick: url="+delUrl);
+                mRequest = new JsonObjectRequest(delUrl, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i(TAG, "DeletePersonalDialog.onResponse: resp=" + response);
+                            int code = response.getInt("code");
+                            if (code == 0) {
+                                departmentBeanList.remove(longClickPosition);
+                                listAdapter.notifyDataSetChanged();
+                            }
+                            String msg = response.getString("msg");
+                            showToastShort(msg);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        mWaitDialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "DepartmentManagerActivity.onErrorResponse: " + error.getMessage());
+                        mWaitDialog.dismiss();
+                    }
+                });
+                mWaitDialog.show();
+                mRequestQueue.add(mRequest);
             }
         });
         popupWindow=new PopupWindow(this);
@@ -111,7 +136,6 @@ public class DepartmentManagerActivity extends BaseActivity implements AdapterVi
      * 网络请求数据
      */
     private void requestList() {
-        // TODO: 2017/5/19 网络请求，请求部门列表接口
         String urlList = RequestPath.getListDepartment();
         Log.i(TAG, "DepartmentManagerActivity.requestList: url="+urlList);
         mRequest = new JsonObjectRequest(urlList, null, new Response.Listener<JSONObject>() {
