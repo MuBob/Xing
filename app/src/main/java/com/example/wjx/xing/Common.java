@@ -5,8 +5,10 @@ package com.example.wjx.xing;
  */
 
 public class Common {
+    public static String SERVICE_IP="192.168.0.123";
+    public static String SERVICE_PORT="8080";
     //后台服务器地址
-    public final static String baseurl = "http://192.168.0.123:8080/Xing/";
+    public static String baseurl = String.format("http://%s:%s/Xing/", SERVICE_IP, SERVICE_PORT);
 
     /**
      * 界面传值或在SharedPreferences中使用的Key

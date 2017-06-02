@@ -23,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.wjx.xing.BuildConfig;
 import com.example.wjx.xing.Common;
 import com.example.wjx.xing.R;
+import com.example.wjx.xing.dialog.InputServiceDialog;
 import com.example.wjx.xing.net.RequestPath;
 import com.example.wjx.xing.utils.StartActivity;
 import com.example.wjx.xing.utils.StringUtil;
@@ -156,6 +157,9 @@ public class LoginActivity extends BaseActivity {
         if(BuildConfig.DEBUG){
             mNumber.setText("123456789");
             mPassword.setText("111111");
+        }else {
+            InputServiceDialog dialog=new InputServiceDialog(this);
+            dialog.show();
         }
     }
 
